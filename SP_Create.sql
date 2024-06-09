@@ -246,28 +246,44 @@ GO
 
 select * from Carrito_Compra
 drop procedure SP_INGRESAR_ARTICULO_A_CARRITO
+
 USE KOALASA
 GO
 CREATE PROCEDURE SP_GENERAR_COMPRA(
-@Fecha DATE,
-@Total money,
-@CodigoCliente varchar(15),
-@CodigoVendedor varchar(15),
-@IdMetodoPago INT
+    @CodigoCliente VARCHAR(15),
+    @CodigoVendedor VARCHAR(15),
+    @IdMetodoPago INT
 )
 AS
-IF(@IdMetodoPago='')
-    BEGIN
-    PRINT 'No Se pueden Ingresar Campos En Blanco'
-RETURN 
-END
-ELSE
 BEGIN
- INSERT INTO Compra(Fecha,Total,CodigoCliente,CodigoVendedor,IdMetodoPago)
- values (@Fecha,@Total,@CodigoCliente,@CodigoVendedor,@IdMetodoPago)
- Print 'Compra Generada Exitosamente'
-END
+    IF (@IdMetodoPago = '')
+    BEGIN
+        PRINT 'No se pueden ingresar campos en blanco';
+        RETURN;
+    END;
+      INSERT INTO Compra (Fecha, Total, CodigoCliente, CodigoVendedor, IdMetodoPago)
+    SELECT 
+        GETDATE(), 
+        SUM(SubTotal), 
+        @CodigoCliente, 
+        @CodigoVendedor, 
+        @IdMetodoPago
+    FROM 
+        Carrito_Compra
+    WHERE 
+        NumFactura IS NULL;
+
+    DECLARE @NumFactura INT;
+    SET @NumFactura = SCOPE_IDENTITY();
+
+    UPDATE Carrito_Compra
+    SET NumFactura = @NumFactura
+    WHERE NumFactura IS NULL;
+
+    PRINT 'Compra generada exitosamente';
+END;
 GO
+
 
 
 

@@ -35,3 +35,7 @@ SELECT * FROM Metodo_Pago
 
 EXECUTE SP_INGRESAR_ARTICULO_A_CARRITO '1',3
 Select * from Carrito_Compra
+
+execute SP_GENERAR_COMPRA 'C-504420818','C-504420818',2  
+
+select * from Compra
