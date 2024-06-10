@@ -153,3 +153,5 @@ GO
 
 Execute SP_REACTIVAR_PROVEEDOR 'P-0687'
 select * from Proveedor
+
+

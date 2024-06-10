@@ -92,7 +92,7 @@ IF(@NCodTipo='' OR @NTalla='' OR @NTalla='' or @NPrecioUnitario='')
 END
 --Validar Color y tipo
     DECLARE @NCodigoZapato VARCHAR(10)
-    SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
+    SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + '-' + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
     IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
     BEGIN
     PRINT 'El Zapato Ya existe'
