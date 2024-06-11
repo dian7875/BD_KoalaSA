@@ -1,15 +1,8 @@
 use KOALASA
-EXEC SP_INGRESAR_PROVEEDOR  'P-005', 'KoalaIndia2', '123456783', '12345678', 'proveedor6@empresa.com';
-EXEC SP_INGRESAR_PROVEEDOR '', 'Proveedor1','123456789', '12345678', 'proveedor1@empresa.com';
-EXEC SP_INGRESAR_PROVEEDOR '000', 'Proveedor4', '123456789', 'ABC','proveedor4@empresa.com';
-EXEC SP_INGRESAR_PROVEEDOR '002', 'Proveedor3', '123456789', '12345678', 'proveedor3empresa.com';
-
 EXEC SP_INGRESAR_TIPO 'Tipo3','999';
 EXEC SP_INGRESAR_TIPO 'Tipo3','P-004';
 EXEC SP_INGRESAR_TIPO 'Tipo2','';
 
-EXEC SP_INGRESAR_COLOR 'verde';
-EXEC SP_INGRESAR_COLOR 'ROJO';
 
 EXEC SP_INGRESAR_ZAPATO  2, 2, 99, 90;
 EXEC SP_INGRESAR_ZAPATO  1, 1, 32, 90;
@@ -34,6 +27,10 @@ EXEC SP_INGRESAR_PERSONA  1234,  'Juan', 'Perez','Gomez', 'juan.perez@example.co
 EXEC SP_INGRESAR_PERSONA  12345678,  'Juan', 'Perez','Gomez', 'juan.perez@example.com','','C';
 EXEC SP_INGRESAR_PERSONA  12345678,  'Juan', 'Perez','Gomez', 'juan.perez@example.com','12345672','Z';
 
+
+
+
+
 EXEC SP_EDITAR_NOMBRE_TIPO 1, 'TipoNuevo'
 EXEC SP_EDITAR_PROVEEDOR_TIPO 1, 'P-004'
 
@@ -47,19 +44,97 @@ GO
 REVERT;
 GO
 
+
+
+
+
 EXECUTE AS USER = 'KOALAADMIN';
 GO
-EXEC SP_INGRESAR_COLOR 'AZUL';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0145', 'KangarooKrafts', '12131436', '+506 66213477', 'KangarooKrafts@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0124', 'KoalaAfrica', '12131415', '+506 66213456', 'KoalaAfrica@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0125', 'GiraffeGoods', '12131416', '+506 66213457', 'GiraffeGoods@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0126', 'LionSupplies', '12131417', '+506 66213458', 'LionSupplies@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0127', 'ElephantEquip', '12131418', '+506 66213459', 'ElephantEquip@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0128', 'RhinoResources', '12131419', '+506 66213460', 'RhinoResources@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0129', 'CheetahChase', '12131420', '+506 66213461', 'CheetahChase@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0130', 'ZebraZest', '12131421', '+506 66213462', 'ZebraZest@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0131', 'HippoHaven', '12131422', '+506 66213463', 'HippoHaven@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0132', 'BuffaloBasics', '12131423', '+506 66213464', 'BuffaloBasics@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0133', 'AntelopeAccessories', '12131424', '+506 66213465', 'AntelopeAccessories@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0134', 'LeopardLinks', '12131425', '+506 66213466', 'LeopardLinks@empresa.com';
 GO
 REVERT;
+GO
+
+USE KOALASA
+GO
+EXEC SP_INGRESAR_PROVEEDOR 'P-0144', 'FalconFurnishings', '12131435', '+506 66213476', 'FalconFurnishings@empresa.com';
 GO
 
 EXECUTE AS USER = 'Vendedor';
 GO
-EXEC SP_INGRESAR_COLOR 'NEGRO';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0135', 'CrocodileCreations', '12131426', '+506 66213467', 'CrocodileCreations@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0136', 'PantherProducts', '12131427', '+506 66213468', 'PantherProducts@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0137', 'HyenaHoldings', '12131428', '+506 66213469', 'HyenaHoldings@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0138', 'MeerkatMaterials', '12131429', '+506 66213470', 'MeerkatMaterials@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0139', 'GazelleGear', '12131430', '+506 66213471', 'GazelleGear@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0140', 'WildebeestWare', '12131431', '+506 66213472', 'WildebeestWare@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0141', 'VultureVentures', '12131432', '+506 66213473', 'VultureVentures@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0142', 'OstrichOptions', '12131433', '+506 66213474', 'OstrichOptions@empresa.com';
+EXEC SP_INGRESAR_PROVEEDOR 'P-0143', 'EagleEssentials', '12131434', '+506 66213475', 'EagleEssentials@empresa.com';
 GO
 REVERT;
 GO
+USE KOALASA
+GO
+--Metodos View
+select * from Proveedor
+select * from Audit_Proveedor
 
+
+/*
+delete from Proveedor
+delete from Audit_Proveedor
+*/
+
+EXECUTE AS USER = 'Vendedor';
+GO
+EXEC SP_INGRESAR_COLOR 'AZUL';
+EXEC SP_INGRESAR_COLOR 'VERDE';
+EXEC SP_INGRESAR_COLOR 'AMARILLO';
+EXEC SP_INGRESAR_COLOR 'NARANJA';
+EXEC SP_INGRESAR_COLOR 'MORADO';
+EXEC SP_INGRESAR_COLOR 'NEGRO';
+EXEC SP_INGRESAR_COLOR 'BLANCO';
+EXEC SP_INGRESAR_COLOR 'GRIS';
+EXEC SP_INGRESAR_COLOR 'ROSADO';
+EXEC SP_INGRESAR_COLOR 'MARRÓN';
+GO
+REVERT;
+GO
+EXECUTE AS USER = 'KOALAADMIN';
+GO
+EXEC SP_INGRESAR_COLOR 'VIOLETA';
+EXEC SP_INGRESAR_COLOR 'TURQUESA';
+EXEC SP_INGRESAR_COLOR 'CIAN';
+EXEC SP_INGRESAR_COLOR 'LILA';
+EXEC SP_INGRESAR_COLOR 'BEIGE';
+EXEC SP_INGRESAR_COLOR 'DORADO';
+EXEC SP_INGRESAR_COLOR 'PLATEADO';
+EXEC SP_INGRESAR_COLOR 'FUCSIA';
+EXEC SP_INGRESAR_COLOR 'AZUL MARINO';
+EXEC SP_INGRESAR_COLOR 'VERDE OLIVA';
+GO
+REVERT;
+GO
+USE KOALASA
+GO
+EXEC SP_INGRESAR_COLOR 'MIXTO';
+GO
+--Metodos View
 select * from Audit_Color
 select * from Color
+/*
+Delete from Audit_Color
+Delete from Color
+*/

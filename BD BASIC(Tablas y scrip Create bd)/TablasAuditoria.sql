@@ -1,4 +1,3 @@
-
 ---Tablas de auditoria
 USE KOALASA;
 GO

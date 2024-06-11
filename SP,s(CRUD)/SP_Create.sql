@@ -281,7 +281,7 @@ GO
 USE KOALASA
 GO
 CREATE PROCEDURE SP_INGRESAR_PERSONA(
-    @NCedula INT,
+    @NCedula VARCHAR(15),
     @NNombre VARCHAR(20),
     @NApellido1 VARCHAR(20),
     @NApellido2 VARCHAR(20),
