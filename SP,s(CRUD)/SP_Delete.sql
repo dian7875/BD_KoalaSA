@@ -24,7 +24,7 @@ BEGIN
     BEGIN TRY
 
         DELETE FROM Proveedor
-        WHERE CodProveedor = @CodProveedor
+        WHERE CodigoProveedor = @CodProveedor
 
         COMMIT TRANSACTION
 
@@ -93,86 +93,6 @@ END
 GO
 
 EXEC SP_DELETE_Compra @NumFactura = 1
-
---DELETE VENDEDOR
-USE KOALASA
-GO
-CREATE PROCEDURE SP_DELETE_Vendedor(
-@CodigoVendedor varchar(15)
-)
-AS
-BEGIN
-        IF (@CodigoVendedor IS NULL OR @CodigoVendedor = 0)
-        BEGIN
-        PRINT 'El vendedor no puede ser un campo vacio ni 0'
-        RETURN
-END
-
- BEGIN TRANSACTION
-
-    BEGIN TRY
-        DELETE FROM Vendedor
-        WHERE CodigoVendedor = @CodigoVendedor
-
-        COMMIT TRANSACTION
-
-        PRINT 'Vendedor eliminado exitosamente!!'
-    END TRY
-    BEGIN CATCH
-
-        ROLLBACK TRANSACTION
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        PRINT 'Error al eliminar el registro: ' + @ErrorMessage
-
-        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
-    END CATCH
-END
-GO
-
-EXEC SP_DELETE_Vendedor @CodigoVendedor = 1
-
---DELETE CLIENTE
-USE KOALASA
-GO
-CREATE PROCEDURE SP_DELETE_Cliente(
-@CodigoCliente varchar(15)
-)
-AS
-BEGIN
-        IF (@CodigoCliente IS NULL OR @CodigoCliente = 0)
-BEGIN
-        PRINT 'El cliente no puede ser un campo vacio ni 0'
-        RETURN
-END
-
- BEGIN TRANSACTION
-
-    BEGIN TRY
-        DELETE FROM Cliente
-        WHERE CodigoCliente = @CodigoCliente
-
-        COMMIT TRANSACTION
-
-        PRINT 'Cliente eliminado exitosamente!!'
-    END TRY
-    BEGIN CATCH
-
-        ROLLBACK TRANSACTION
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        PRINT 'Error al eliminar el registro: ' + @ErrorMessage
-
-        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
-    END CATCH
-END
-GO
-
-EXEC SP_DELETE_Cliente @CodigoCliente = 1
 
 --DELETE ZAPATO
 USE KOALASA

@@ -114,7 +114,7 @@ BEGIN
 	---Falta ver si ya esta inactivo
     BEGIN
         UPDATE Proveedor 
-        SET Estado = 0
+        SET EstadoProveedor = 0
         WHERE CodigoProveedor = @CodigoProveedor
         PRINT 'Estado del proveedor Se ha dado de baja correctamente'
     END
@@ -147,7 +147,7 @@ BEGIN
 	---Falta ver si ya esta activo
     BEGIN
         UPDATE Proveedor 
-        SET Estado = 1
+        SET EstadoProveedor = 1
         WHERE CodigoProveedor = @CodigoProveedor
         PRINT 'El proveedor se ha reactivado correctamente'
     END
@@ -231,7 +231,7 @@ BEGIN
         END
 
     UPDATE Tipo
-    SET CodigoProveedor = @CodigoProveedor
+    SET CodProveedor = @CodigoProveedor
     WHERE CodigoTipo = @CodigoTipo;
 
 END
