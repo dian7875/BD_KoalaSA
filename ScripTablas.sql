@@ -79,40 +79,11 @@ CREATE TABLE Persona (
 	Apellido1 varchar(20) not null,
 	Apellido2 varchar(20) null,
 	Correo varchar(30) not null,
-	Telefono Varchar(20) not null
+	Telefono Varchar(20) not null,
+	Tipo Char(1) not null,
 	CONSTRAINT PK_Persona_Cedula
     PRIMARY KEY CLUSTERED(Cedula)
 )on Personas
-GO
-
-Use KOALASA
-GO
-CREATE TABLE Cliente (
-    CodigoCliente VARCHAR(15) NOT NULL,
-	CedulaCliente int not null,
-	EstadoCliente bit not null Default 1
-    CONSTRAINT PK_Cliente_Codigo
-    PRIMARY KEY CLUSTERED(CodigoCliente)
-	CONSTRAINT FK_Persona_Cliente 
-	FOREIGN KEY(CedulaCliente) REFERENCES Persona(Cedula)
-	ON DELETE CASCADE
-    ON UPDATE CASCADE,
-)ON Clientes;
-GO
-
-Use KOALASA
-GO
-CREATE TABLE Vendedor (
-	CodigoVendedor Varchar(15) not null,
-	CedulaVendedor int not null,
-	EstadoVendedor bit not null DEFAULT 1
-    CONSTRAINT PK_Vendedor_Codigo
-    PRIMARY KEY CLUSTERED(CodigoVendedor),
-	CONSTRAINT FK_Persona_Vendedor 
-	FOREIGN KEY(CedulaVendedor) REFERENCES Persona(Cedula)
-	ON DELETE CASCADE
-    ON UPDATE CASCADE,
-)ON Vendedores;
 GO
 
 Use KOALASA
@@ -131,17 +102,17 @@ CREATE TABLE Compra (
     NumFactura INT NOT NULL identity(1,1),
     Fecha DATE NOT NULL,
     Total money NOT NULL,
-    CodigoCliente varchar(15) NOT NULL,
-	CodigoVendedor varchar(15) Not null,
+    CedCliente INT NOT NULL,
+	CedVendedor INT Not null,
     IdMetodoPago INT NOT NULL,
 	CONSTRAINT FK_MetodoCarrito_IDMetodoPago
     FOREIGN KEY (IdMetodoPago) REFERENCES Metodo_Pago(IdMetodoPago)
 	ON DELETE CASCADE
     ON UPDATE CASCADE,
     CONSTRAINT FK_VendedorCompra_CodVendedor
-    FOREIGN KEY (CodigoVendedor) REFERENCES Vendedor(CodigoVendedor),
+    FOREIGN KEY (CedVendedor) REFERENCES Persona(Cedula),
     CONSTRAINT Fk_ClienteCompra_CodCliente
-    FOREIGN KEY (CodigoCliente) REFERENCES Cliente(CodigoCliente),
+    FOREIGN KEY (CedCliente) REFERENCES Persona(Cedula),
     CONSTRAINT PK_Compra_NumFactura
     PRIMARY KEY CLUSTERED(NumFactura)
 )ON Ventas;
