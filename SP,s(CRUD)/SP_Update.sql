@@ -350,6 +350,8 @@ GO
 
 -- Stock
 
+
+-- Puede que sea innecesario tener este...
 USE KOALASA
 GO
 
@@ -392,22 +394,108 @@ GO
 
 -- Persona
 
--- USE KOALASA
--- GO
+USE KOALASA
+GO
 
--- CREATE PROCEDURE SP_EDITAR_NOMBRE_PERSONA @CedulaPersona INT, @CodigoZapato VARCHAR(10)
--- AS
--- BEGIN
---     IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
---         BEGIN
---             PRINT 'El stock no existe'
---             RETURN
---         END
+CREATE PROCEDURE SP_EDITAR_NOMBRE_PERSONA @Cedula VARCHAR(15), @Nombre VARCHAR(20)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
     
---     UPDATE Stock
---     SET CodigoZapato = @CodigoZapato
---     WHERE IdStock = @IdStock;
+    IF @Nombre = ''
+        BEGIN
+            PRINT 'No se permiten nombre vacíos'
+            RETURN
+        END
 
--- END
--- GO
+    UPDATE Persona
+    SET Nombre = @Nombre
+    WHERE Cedula = @Cedula;
 
+END
+GO
+
+-- 
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_APELLIDOS_PERSONA @Cedula VARCHAR(15), @Apellido1 VARCHAR(20), @Apellido2 VARCHAR(20) = NULL
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Apellido1 = '' OR @Apellido2 = ''
+        BEGIN
+            PRINT 'No se permiten apellidos vacíos (si se desea omitir el segundo apellido, simplemente omitalo en los argumentos)'
+            RETURN
+        END
+
+    UPDATE Persona
+    SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
+    WHERE Cedula = @Cedula;
+
+END
+GO
+
+-- 
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_CORREO_PERSONA @Cedula VARCHAR(15), @Correo VARCHAR(30)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Correo = ''
+        BEGIN
+            PRINT 'No se permiten correos vacíos'
+            RETURN
+        END
+
+    UPDATE Persona
+    SET Correo = @Correo
+    WHERE Cedula = @Cedula;
+
+END
+GO
+
+-- 
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TELEFONO_PERSONA @Cedula VARCHAR(15), @Tipo CHAR(1)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Tipo != 'C' AND @Tipo != 'V'
+        BEGIN
+            PRINT 'Tipo invalido (se permiten los tipos C (cliente) y V (vendedor))'
+            RETURN
+        END
+
+    UPDATE Persona
+    SET Telefono = @Telefono
+    WHERE Cedula = @Cedula;
+
+END
+GO

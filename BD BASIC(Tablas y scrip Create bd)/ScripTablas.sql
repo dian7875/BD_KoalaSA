@@ -79,7 +79,7 @@ GO
 USE KOALASA
 GO
 CREATE TABLE Persona (
-	Cedula int not null,
+	Cedula VARCHAR(15),
 	Nombre varchar(20) not null,
 	Apellido1 varchar(20) not null,
 	Apellido2 varchar(20) null,
