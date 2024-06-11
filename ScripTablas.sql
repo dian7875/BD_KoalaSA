@@ -64,7 +64,7 @@ CREATE TABLE Stock (
     Existencias INT NOT NULL DEFAULT 0,
     FOREIGN KEY (CodigoZapato) REFERENCES Zapato(CodigoZapato)
 	ON DELETE CASCADE
-    ON UPDATE CASCADE,
+    ON UPDATE CASCADE,
     CONSTRAINT PK_Inventario_IDArticulo
     PRIMARY KEY CLUSTERED(IdStock)
 )ON Stock;

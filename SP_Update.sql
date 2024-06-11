@@ -266,7 +266,6 @@ GO
 
 -- Zapato
 
-
 USE KOALASA
 GO
 
@@ -285,3 +284,130 @@ BEGIN
 
 END
 GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_COLOR_ZAPATO @CodigoZapato varchar(10), @CodColor INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Zapato WHERE CodigoZapato = @CodigoZapato)
+        BEGIN
+            PRINT 'El zapato no existe'
+            RETURN
+        END
+    
+    UPDATE Zapato
+    SET CodColor = @CodColor
+    WHERE CodigoZapato = @CodigoZapato;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TALLA_ZAPATO @CodigoZapato varchar(10), @Talla INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Zapato WHERE CodigoZapato = @CodigoZapato)
+        BEGIN
+            PRINT 'El zapato no existe'
+            RETURN
+        END
+    
+    UPDATE Zapato
+    SET Talla = @Talla
+    WHERE CodigoZapato = @CodigoZapato;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_PRECIO_ZAPATO @CodigoZapato varchar(10), @PrecioUnitario MONEY
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Zapato WHERE CodigoZapato = @CodigoZapato)
+        BEGIN
+            PRINT 'El zapato no existe'
+            RETURN
+        END
+    
+    UPDATE Zapato
+    SET PrecioUnitario = @PrecioUnitario
+    WHERE CodigoZapato = @CodigoZapato;
+
+END
+GO
+
+-- Stock
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_ZAPATO_STOCK @IdStock INT, @CodigoZapato VARCHAR(10)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
+        BEGIN
+            PRINT 'El stock no existe'
+            RETURN
+        END
+    
+    UPDATE Stock
+    SET CodigoZapato = @CodigoZapato
+    WHERE IdStock = @IdStock;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_EXISTENCIAS_STOCK @IdStock INT, @Existencias INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
+        BEGIN
+            PRINT 'El stock no existe'
+            RETURN
+        END
+    
+    UPDATE Stock
+    SET Existencias = @Existencias
+    WHERE IdStock = @IdStock;
+
+END
+GO
+
+-- Persona
+
+-- USE KOALASA
+-- GO
+
+-- CREATE PROCEDURE SP_EDITAR_NOMBRE_PERSONA @CedulaPersona INT, @CodigoZapato VARCHAR(10)
+-- AS
+-- BEGIN
+--     IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
+--         BEGIN
+--             PRINT 'El stock no existe'
+--             RETURN
+--         END
+    
+--     UPDATE Stock
+--     SET CodigoZapato = @CodigoZapato
+--     WHERE IdStock = @IdStock;
+
+-- END
+-- GO
+
