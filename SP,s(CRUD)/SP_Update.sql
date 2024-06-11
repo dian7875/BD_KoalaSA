@@ -473,12 +473,39 @@ BEGIN
 END
 GO
 
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TELEFONO_PERSONA @Cedula VARCHAR(15), @Telefono VARCHAR(30)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Telefono = ''
+        BEGIN
+            PRINT 'No se permiten telefonos vacíos'
+            RETURN
+        END
+
+    UPDATE Persona
+    SET Telefono = @Telefono
+    WHERE Cedula = @Cedula;
+
+END
+GO
+
 -- 
 
 USE KOALASA
 GO
 
-CREATE PROCEDURE SP_EDITAR_TELEFONO_PERSONA @Cedula VARCHAR(15), @Tipo CHAR(1)
+CREATE PROCEDURE SP_EDITAR_TIPO_PERSONA @Cedula VARCHAR(15), @Tipo CHAR(1)
 AS
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
@@ -494,8 +521,156 @@ BEGIN
         END
 
     UPDATE Persona
-    SET Telefono = @Telefono
+    SET Tipo = @Tipo
     WHERE Cedula = @Cedula;
 
 END
 GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_NOMBRE_METODO_PAGO @IdMetodoPago INT, @NombreMetodo VARCHAR(25)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Metodo_Pago WHERE IdMetodoPago = @IdMetodoPago)
+        BEGIN
+            PRINT 'El metodo de pago no existe'
+            RETURN
+        END
+    
+    IF @NombreMetodo = ''
+        BEGIN
+            PRINT 'No se permiten nombres vacíos'
+            RETURN
+        END
+
+    UPDATE Metodo_Pago
+    SET NombreMetodo = @NombreMetodo
+    WHERE IdMetodoPago = @IdMetodoPago;
+
+END
+GO
+
+-- Compra
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_FECHA_COMPRA @NumFactura INT, @Fecha DATE
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET Fecha = @Fecha
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TOTAL_COMPRA @NumFactura INT, @Total MONEY
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET Total = @Total
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_CLIENTE_COMPRA @NumFactura INT, @CedCliente VARCHAR(15)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    IF @CedCliente = ''
+        BEGIN
+            PRINT 'No se permite una cedula vacia'
+            RETURN
+        END
+
+    UPDATE Compra
+    SET CedCliente = @CedCliente
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_VENDEDOR_COMPRA @NumFactura INT, @CedVendedor VARCHAR(15)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    IF @CedVendedor = ''
+        BEGIN
+            PRINT 'No se permite una cedula vacia'
+            RETURN
+        END
+
+    UPDATE Compra
+    SET CedVendedor = @CedVendedor
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_METODO_PAGO_COMPRA @NumFactura INT, @IdMetodoPago INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET IdMetodoPago = @IdMetodoPago
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+-- Carrito_Compra
+
+
