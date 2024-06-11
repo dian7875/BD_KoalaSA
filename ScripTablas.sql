@@ -26,6 +26,8 @@ CREATE TABLE Tipo (
     PRIMARY KEY CLUSTERED(CodigoTipo)
 )ON Stock;
 GO
+
+
 Use KOALASA
 GO
 CREATE TABLE Color (
