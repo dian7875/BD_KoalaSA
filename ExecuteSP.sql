@@ -34,3 +34,7 @@ EXEC SP_AñADIR_METODO_PAGO '';
 EXEC SP_INGRESAR_PERSONA  1234,  'Juan', 'Perez','Gomez', 'juan.perez@example.com','12348','V';
 EXEC SP_INGRESAR_PERSONA  12345678,  'Juan', 'Perez','Gomez', 'juan.perez@example.com','','C';
 EXEC SP_INGRESAR_PERSONA  12345678,  'Juan', 'Perez','Gomez', 'juan.perez@example.com','12345672','Z';
+
+EXEC SP_EDITAR_NOMBRE_TIPO 1, 'TipoNuevo'
+EXEC SP_EDITAR_PROVEEDOR_TIPO 1, 'P-004'
+

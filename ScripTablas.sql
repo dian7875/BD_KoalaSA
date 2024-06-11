@@ -16,7 +16,7 @@ Use KOALASA
 GO
 CREATE TABLE Tipo (
     CodigoTipo INT NOT NULL IDENTITY (1,1),
-    NombreTipo VARCHAR(10)NOT NULL,
+    NombreTipo VARCHAR(10) NOT NULL,
     CodProveedor VARCHAR(10) NOT NULL,
     CONSTRAINT FK_TipoProveedor_CodProveedor
     FOREIGN KEY (CodProveedor) REFERENCES Proveedor(CodigoProveedor)

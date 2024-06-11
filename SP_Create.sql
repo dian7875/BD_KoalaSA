@@ -193,7 +193,7 @@ BEGIN
             RETURN;
         END
         DECLARE @NCodigoZapato VARCHAR(20)
-        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
+        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + '-' + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
         IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
         BEGIN
             PRINT 'El Zapato Ya Existe';
