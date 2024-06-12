@@ -278,6 +278,7 @@ END
 GO
 
 
+
 USE KOALASA
 GO
 CREATE PROCEDURE SP_INGRESAR_PERSONA(
@@ -305,9 +306,15 @@ BEGIN
             ROLLBACK TRANSACTION;
             RETURN;
         END
+		IF @NTipo = 'V' AND USER_NAME() = 'Vendedor'
+        BEGIN
+            PRINT 'No tienes permiso para ingresar personas tipo Vendedor';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
         IF EXISTS (SELECT 1 FROM Persona WHERE Cedula = @NCedula)
         BEGIN
-            PRINT 'La Persona ya existe';
+            PRINT 'La Cedula Ya esta asociada a Alguien';
             ROLLBACK TRANSACTION;
             RETURN;
         END

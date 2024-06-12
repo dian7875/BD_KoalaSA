@@ -73,7 +73,6 @@ CREATE TABLE Stock (
 )ON Stock;
 GO
 
-
 USE KOALASA
 GO
 CREATE TABLE Persona (
@@ -105,8 +104,8 @@ CREATE TABLE Compra (
     NumFactura INT NOT NULL identity(1,1),
     Fecha DATE NOT NULL,
     Total money NOT NULL,
-    CedCliente INT NOT NULL,
-	CedVendedor INT Not null,
+    CedCliente Varchar(15) NOT NULL,
+	CedVendedor VARCHAR(15) NOT null,
     IdMetodoPago INT NOT NULL,
 	CONSTRAINT FK_MetodoCarrito_IDMetodoPago
     FOREIGN KEY (IdMetodoPago) REFERENCES Metodo_Pago(IdMetodoPago)
