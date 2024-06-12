@@ -76,6 +76,7 @@ GO
 USE KOALASA
 GO
 CREATE TABLE Persona (
+	Cedula VARCHAR(15) NOT NULL,
 	Cedula Varchar(15) not null,
 	Nombre varchar(20) not null,
 	Apellido1 varchar(20) not null,
@@ -104,8 +105,8 @@ CREATE TABLE Compra (
     NumFactura INT NOT NULL identity(1,1),
     Fecha DATE NOT NULL,
     Total money NOT NULL,
-    CedCliente Varchar(15) NOT NULL,
-	CedVendedor VARCHAR(15) NOT null,
+    CedCliente VARCHAR(15) NOT NULL,
+	CedVendedor VARCHAR(15) NOT NULL,
     IdMetodoPago INT NOT NULL,
 	CONSTRAINT FK_MetodoCarrito_IDMetodoPago
     FOREIGN KEY (IdMetodoPago) REFERENCES Metodo_Pago(IdMetodoPago)

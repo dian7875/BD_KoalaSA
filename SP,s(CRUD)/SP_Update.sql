@@ -185,31 +185,6 @@ BEGIN
 END
 GO
 
-USE KOALASA
-GO
-
-CREATE PROCEDURE SP_EDITAR_NOMBRE_TIPO @CodigoTipo INT, @NombreTipo VARCHAR(10)
-AS
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM Tipo WHERE CodigoTipo = @CodigoTipo)
-        BEGIN
-            PRINT 'El tipo no existe'
-            RETURN
-        END
-    
-    IF @NombreTipo = ''
-        BEGIN
-            PRINT 'No se permite un tipo vacio'
-            RETURN
-        END
-
-    UPDATE Tipo
-    SET NombreTipo = @NombreTipo
-    WHERE CodigoTipo = @CodigoTipo;
-
-END
-GO
-
 -- 
 
 USE KOALASA
@@ -234,6 +209,7 @@ BEGIN
     SET CodProveedor = @CodigoProveedor
     WHERE CodigoTipo = @CodigoTipo;
 
+    PRINT 'Se cambio el tipo del proveedor exitosamente'
 END
 GO
 
@@ -261,6 +237,8 @@ BEGIN
     SET NombreColor = @NombreColor
     WHERE CodigoColor = @CodigoColor;
 
+    PRINT 'Se cambio el nombre del color exitosamente'
+
 END
 GO
 
@@ -281,6 +259,8 @@ BEGIN
     UPDATE Zapato
     SET CodTipo = @CodTipo
     WHERE CodigoZapato = @CodigoZapato;
+
+    PRINT 'Se cambio el tipo del zapato exitosamente'
 
 END
 GO
@@ -303,6 +283,8 @@ BEGIN
     SET CodColor = @CodColor
     WHERE CodigoZapato = @CodigoZapato;
 
+    PRINT 'Se cambio el color del zapato exitosamente'
+
 END
 GO
 
@@ -323,6 +305,8 @@ BEGIN
     UPDATE Zapato
     SET Talla = @Talla
     WHERE CodigoZapato = @CodigoZapato;
+
+    PRINT 'Se cambio la talla del zapato exitosamente'
 
 END
 GO
@@ -345,6 +329,8 @@ BEGIN
     SET PrecioUnitario = @PrecioUnitario
     WHERE CodigoZapato = @CodigoZapato;
 
+    PRINT 'Se cambio el precio del zapato exitosamente'
+
 END
 GO
 
@@ -352,24 +338,26 @@ GO
 
 
 -- Puede que sea innecesario tener este...
-USE KOALASA
-GO
+-- USE KOALASA
+-- GO
 
-CREATE PROCEDURE SP_EDITAR_ZAPATO_STOCK @IdStock INT, @CodigoZapato VARCHAR(10)
-AS
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
-        BEGIN
-            PRINT 'El stock no existe'
-            RETURN
-        END
+-- CREATE PROCEDURE SP_EDITAR_ZAPATO_STOCK @IdStock INT, @CodigoZapato VARCHAR(10)
+-- AS
+-- BEGIN
+--     IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
+--         BEGIN
+--             PRINT 'El stock no existe'
+--             RETURN
+--         END
     
-    UPDATE Stock
-    SET CodigoZapato = @CodigoZapato
-    WHERE IdStock = @IdStock;
+--     UPDATE Stock
+--     SET CodigoZapato = @CodigoZapato
+--     WHERE IdStock = @IdStock;
 
-END
-GO
+--     PRINT 'Se cambio el zapato del stock exitosamente'
+
+-- END
+-- GO
 
 --
 
@@ -388,6 +376,8 @@ BEGIN
     UPDATE Stock
     SET Existencias = @Existencias
     WHERE IdStock = @IdStock;
+
+    PRINT 'Se cambiaron las existencias del stock exitosamente'
 
 END
 GO
@@ -416,6 +406,8 @@ BEGIN
     SET Nombre = @Nombre
     WHERE Cedula = @Cedula;
 
+    PRINT 'Se cambio el nombre de la persona exitosamente'
+
 END
 GO
 
@@ -442,6 +434,8 @@ BEGIN
     UPDATE Persona
     SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
     WHERE Cedula = @Cedula;
+
+    PRINT 'Se cambiaron los apellidos de la persona exitosamente'
 
 END
 GO
@@ -470,6 +464,37 @@ BEGIN
     SET Correo = @Correo
     WHERE Cedula = @Cedula;
 
+    PRINT 'Se cambio el correo de la persona exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TELEFONO_PERSONA @Cedula VARCHAR(15), @Telefono VARCHAR(30)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Telefono = ''
+        BEGIN
+            PRINT 'No se permiten telefonos vacíos'
+            RETURN
+        END
+
+    UPDATE Persona
+    SET Telefono = @Telefono
+    WHERE Cedula = @Cedula;
+
+    PRINT 'Se cambio el telefono del persona exitosamente'
+
 END
 GO
 
@@ -478,7 +503,7 @@ GO
 USE KOALASA
 GO
 
-CREATE PROCEDURE SP_EDITAR_TELEFONO_PERSONA @Cedula VARCHAR(15), @Tipo CHAR(1)
+CREATE PROCEDURE SP_EDITAR_TIPO_PERSONA @Cedula VARCHAR(15), @Tipo CHAR(1)
 AS
 BEGIN
     IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
@@ -494,8 +519,212 @@ BEGIN
         END
 
     UPDATE Persona
-    SET Telefono = @Telefono
+    SET Tipo = @Tipo
     WHERE Cedula = @Cedula;
+
+    PRINT 'Se cambio el rol de la persona exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_NOMBRE_METODO_PAGO @IdMetodoPago INT, @NombreMetodo VARCHAR(25)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Metodo_Pago WHERE IdMetodoPago = @IdMetodoPago)
+        BEGIN
+            PRINT 'El metodo de pago no existe'
+            RETURN
+        END
+    
+    IF @NombreMetodo = ''
+        BEGIN
+            PRINT 'No se permiten nombres vacíos'
+            RETURN
+        END
+
+    UPDATE Metodo_Pago
+    SET NombreMetodo = @NombreMetodo
+    WHERE IdMetodoPago = @IdMetodoPago;
+
+    PRINT 'Se cambio el nombre del metodo de pago exitosamente'
+
+END
+GO
+
+-- Compra
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_FECHA_COMPRA @NumFactura INT, @Fecha DATE
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET Fecha = @Fecha
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio la fecha de la compra exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_TOTAL_COMPRA @NumFactura INT, @Total MONEY
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET Total = @Total
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio el total de la compra exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_CLIENTE_COMPRA @NumFactura INT, @CedCliente VARCHAR(15)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    IF @CedCliente = ''
+        BEGIN
+            PRINT 'No se permite una cedula vacia'
+            RETURN
+        END
+
+    UPDATE Compra
+    SET CedCliente = @CedCliente
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio el cliente de la compra exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_VENDEDOR_COMPRA @NumFactura INT, @CedVendedor VARCHAR(15)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    IF @CedVendedor = ''
+        BEGIN
+            PRINT 'No se permite una cedula vacia'
+            RETURN
+        END
+
+    UPDATE Compra
+    SET CedVendedor = @CedVendedor
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio el vendedore de la compra exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_METODO_PAGO_COMPRA @NumFactura INT, @IdMetodoPago INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Compra WHERE NumFactura = @NumFactura)
+        BEGIN
+            PRINT 'La compra no existe'
+            RETURN
+        END
+    
+    UPDATE Compra
+    SET IdMetodoPago = @IdMetodoPago
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio el metodo de pago de la compra exitosamente'
+
+END
+GO
+
+-- Carrito_Compra
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_CANTIDAD_CARRITO @IdCarrito INT, @Cantidad INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Carrito_Compra WHERE IdCarrito = @IdCarrito)
+        BEGIN
+            PRINT 'El carrito no existe'
+            RETURN
+        END
+    
+    UPDATE Carrito_Compra
+    SET Cantidad = @Cantidad
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio la cantidad del carrito exitosamente'
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_SUBTOTAL_CARRITO @IdCarrito INT, @SubTotal INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Carrito_Compra WHERE IdCarrito = @IdCarrito)
+        BEGIN
+            PRINT 'El carrito no existe'
+            RETURN
+        END
+    
+    UPDATE Carrito_Compra
+    SET SubTotal = @SubTotal
+    WHERE NumFactura = @NumFactura;
+
+    PRINT 'Se cambio el subtotal del carrito exitosamente'
 
 END
 GO
