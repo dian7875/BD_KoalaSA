@@ -673,4 +673,42 @@ GO
 
 -- Carrito_Compra
 
+USE KOALASA
+GO
 
+CREATE PROCEDURE SP_EDITAR_CANTIDAD_CARRITO @IdCarrito INT, @Cantidad INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Carrito_Compra WHERE IdCarrito = @IdCarrito)
+        BEGIN
+            PRINT 'El carrito no existe'
+            RETURN
+        END
+    
+    UPDATE Carrito_Compra
+    SET Cantidad = @Cantidad
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
+
+--
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_SUBTOTAL_CARRITO @IdCarrito INT, @SubTotal INT
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Carrito_Compra WHERE IdCarrito = @IdCarrito)
+        BEGIN
+            PRINT 'El carrito no existe'
+            RETURN
+        END
+    
+    UPDATE Carrito_Compra
+    SET SubTotal = @SubTotal
+    WHERE NumFactura = @NumFactura;
+
+END
+GO
