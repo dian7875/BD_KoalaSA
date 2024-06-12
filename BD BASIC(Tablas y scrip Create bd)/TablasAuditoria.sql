@@ -3,6 +3,7 @@ USE KOALASA;
 GO
 CREATE TABLE Audit_Color (
     AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     CodigoColor INT,
     NombreColor VARCHAR(10),
@@ -18,6 +19,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Tipo (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     CodigoTipo INT,
     NombreTipo VARCHAR(10),
@@ -33,6 +35,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Proveedor (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     CodigoProveedor VARCHAR(10),
     NombreProv VARCHAR(20),
@@ -48,6 +51,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Zapato (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     CodigoZapato VARCHAR(10),
     PrecioUnitario money,
@@ -63,6 +67,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Stock (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     CodigoZapato VARCHAR(10),
     Existencias INT,
@@ -77,6 +82,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Persona (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     Cedula int,
 	Nombre varchar(20),
@@ -93,6 +99,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Metodo_Pago (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
 	NombreMetodo VARCHAR(25),
     RealizadoPor NVARCHAR(128),
@@ -106,6 +113,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Compra (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     NumFactura INT,
     Total money,
@@ -122,6 +130,7 @@ Use KOALASA
 GO
 CREATE TABLE Audit_Carrito_Compra (
 	AudID INT IDENTITY(1,1),
+	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
     IdCarrito INT,
 	NumFactura INT,
