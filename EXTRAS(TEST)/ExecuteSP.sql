@@ -1,5 +1,6 @@
-EXEC SP_EDITAR_NOMBRE_TIPO 1, 'TipoNuevo'
+/*EXEC SP_EDITAR_NOMBRE_TIPO 1, 'TipoNuevo'
 EXEC SP_EDITAR_PROVEEDOR_TIPO 1, 'P-004'
+*/
 
 USE KOALASA
 GO
@@ -42,15 +43,6 @@ REVERT;
 GO
 USE KOALASA
 GO
---Metodos View
-select * from Proveedor
-select * from Audit_Proveedor
-
-
-/*
-delete from Proveedor
-delete from Audit_Proveedor
-*/
 
 EXECUTE AS USER = 'Vendedor';
 GO
@@ -86,14 +78,6 @@ USE KOALASA
 GO
 EXEC SP_INGRESAR_COLOR 'MIXTO';
 GO
---Metodos View
-select * from Audit_Color
-select * from Color
-/*
-Delete from Audit_Color
-Delete from Color
-*/
-
 
 USE KOALASA
 GO
@@ -126,6 +110,7 @@ EXEC SP_INGRESAR_TIPO 'BOHEMIO', 'P-0131','U';
 EXEC SP_INGRESAR_TIPO 'SEMI-FORMAL', 'P-0132','U';
 EXEC SP_INGRESAR_TIPO 'BUSINESS CASUAL', 'P-0133','U';
 EXEC SP_INGRESAR_TIPO 'EJECUTIVO', 'P-0134','U';
+EXEC SP_INGRESAR_TIPO 'ADVENTURE', 'P-0134','U';
 GO
 REVERT;
 GO
@@ -220,7 +205,7 @@ USE KOALASA
 GO
 EXECUTE AS USER = 'Vendedor';
 GO
-EXEC SP_AñADIR_METODO_PAGO 'Tarjeta de Débito';
+EXEC SP_AñADIR_METODO_PAGO 'Tarjeta de Débito/Credito';
 EXEC SP_AñADIR_METODO_PAGO 'PayPal';
 EXEC SP_AñADIR_METODO_PAGO 'Transferencia Bancaria';
 EXEC SP_AñADIR_METODO_PAGO 'Pago en Efectivo';
@@ -294,3 +279,26 @@ GO
 REVERT;
 GO
 
+/*
+use KOALASA
+GO
+DELETE FROM Zapato
+DELETE FROM Proveedor
+DELETE FROM Color
+DELETE FROM Tipo
+DELETE FROM Persona
+DELETE FROM Compra
+DELETE FROM Carrito_Compra	
+DELETE FROM Metodo_Pago
+DELETE FROM Stock
+*/
+
+
+USE KOALASA
+GO
+EXECUTE AS USER = 'Vendedor';
+GO
+EXECUTE SP_CATALO_DE_ZAPATOS
+GO
+REVERT;
+GO
