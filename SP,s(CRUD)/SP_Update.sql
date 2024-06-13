@@ -336,31 +336,6 @@ GO
 
 -- Stock
 
-
--- Puede que sea innecesario tener este...
--- USE KOALASA
--- GO
-
--- CREATE PROCEDURE SP_EDITAR_ZAPATO_STOCK @IdStock INT, @CodigoZapato VARCHAR(10)
--- AS
--- BEGIN
---     IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
---         BEGIN
---             PRINT 'El stock no existe'
---             RETURN
---         END
-    
---     UPDATE Stock
---     SET CodigoZapato = @CodigoZapato
---     WHERE IdStock = @IdStock;
-
---     PRINT 'Se cambio el zapato del stock exitosamente'
-
--- END
--- GO
-
---
-
 USE KOALASA
 GO
 
