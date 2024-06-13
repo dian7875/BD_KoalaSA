@@ -176,12 +176,13 @@ BEGIN
             PRINT 'No se permite un tipo vacio'
             RETURN
         END
-
-    UPDATE Tipo
-    SET NombreTipo = @NombreTipo
-    WHERE CodigoTipo = @CodigoTipo;
-
-    PRINT 'Se cambio el nombre del tipo exitosamente'
+    ELSE
+        BEGIN
+            UPDATE Tipo
+            SET NombreTipo = @NombreTipo
+            WHERE CodigoTipo = @CodigoTipo;
+            PRINT 'Se cambio el nombre del tipo exitosamente'
+        END
 END
 GO
 
@@ -204,12 +205,14 @@ BEGIN
             PRINT 'No se permite un proveedor vacio'
             RETURN
         END
+     ELSE
+        BEGIN
+            UPDATE Tipo
+            SET CodProveedor = @CodigoProveedor
+            WHERE CodigoTipo = @CodigoTipo;
 
-    UPDATE Tipo
-    SET CodProveedor = @CodigoProveedor
-    WHERE CodigoTipo = @CodigoTipo;
-
-    PRINT 'Se cambio el tipo del proveedor exitosamente'
+            PRINT 'Se cambio el tipo del proveedor exitosamente'
+        END
 END
 GO
 
@@ -232,12 +235,14 @@ BEGIN
             PRINT 'No se permite un nombre vacio'
             RETURN
         END
+     ELSE
+        BEGIN
+            UPDATE Color
+            SET NombreColor = @NombreColor
+            WHERE CodigoColor = @CodigoColor;
 
-    UPDATE Color
-    SET NombreColor = @NombreColor
-    WHERE CodigoColor = @CodigoColor;
-
-    PRINT 'Se cambio el nombre del color exitosamente'
+            PRINT 'Se cambio el nombre del color exitosamente'
+        END
 
 END
 GO
@@ -256,11 +261,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Zapato
-    SET CodTipo = @CodTipo
-    WHERE CodigoZapato = @CodigoZapato;
+     ELSE
+        BEGIN
+            UPDATE Zapato
+            SET CodTipo = @CodTipo
+            WHERE CodigoZapato = @CodigoZapato;
 
-    PRINT 'Se cambio el tipo del zapato exitosamente'
+            PRINT 'Se cambio el tipo del zapato exitosamente'
+    END
 
 END
 GO
@@ -278,12 +286,16 @@ BEGIN
             PRINT 'El zapato no existe'
             RETURN
         END
-    
-    UPDATE Zapato
-    SET CodColor = @CodColor
-    WHERE CodigoZapato = @CodigoZapato;
 
-    PRINT 'Se cambio el color del zapato exitosamente'
+     ELSE
+        BEGIN
+            UPDATE Zapato
+            SET CodColor = @CodColor
+            WHERE CodigoZapato = @CodigoZapato;
+
+            PRINT 'Se cambio el color del zapato exitosamente'
+
+        END
 
 END
 GO
@@ -302,11 +314,15 @@ BEGIN
             RETURN
         END
     
-    UPDATE Zapato
-    SET Talla = @Talla
-    WHERE CodigoZapato = @CodigoZapato;
 
-    PRINT 'Se cambio la talla del zapato exitosamente'
+     ELSE
+        BEGIN
+            UPDATE Zapato
+            SET Talla = @Talla
+            WHERE CodigoZapato = @CodigoZapato;
+
+            PRINT 'Se cambio la talla del zapato exitosamente'
+        END
 
 END
 GO
@@ -325,11 +341,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Zapato
-    SET PrecioUnitario = @PrecioUnitario
-    WHERE CodigoZapato = @CodigoZapato;
-
-    PRINT 'Se cambio el precio del zapato exitosamente'
+     ELSE
+        BEGIN
+                UPDATE Zapato
+                SET PrecioUnitario = @PrecioUnitario
+                WHERE CodigoZapato = @CodigoZapato;
+        
+            PRINT 'Se cambio el precio del zapato exitosamente'
+        END
 
 END
 GO
@@ -348,11 +367,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Stock
-    SET Existencias = @Existencias
-    WHERE IdStock = @IdStock;
+     ELSE
+        BEGIN
+            UPDATE Stock
+            SET Existencias = @Existencias
+            WHERE IdStock = @IdStock;
 
-    PRINT 'Se cambiaron las existencias del stock exitosamente'
+            PRINT 'Se cambiaron las existencias del stock exitosamente'
+        END
 
 END
 GO
@@ -377,11 +399,14 @@ BEGIN
             RETURN
         END
 
-    UPDATE Persona
-    SET Nombre = @Nombre
-    WHERE Cedula = @Cedula;
+     ELSE
+        BEGIN
+            UPDATE Persona
+            SET Nombre = @Nombre
+            WHERE Cedula = @Cedula;
 
-    PRINT 'Se cambio el nombre de la persona exitosamente'
+            PRINT 'Se cambio el nombre de la persona exitosamente'
+        END
 
 END
 GO
@@ -406,11 +431,14 @@ BEGIN
             RETURN
         END
 
-    UPDATE Persona
-    SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
-    WHERE Cedula = @Cedula;
+    ELSE
+        BEGIN
+            UPDATE Persona
+            SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
+            WHERE Cedula = @Cedula;
 
-    PRINT 'Se cambiaron los apellidos de la persona exitosamente'
+            PRINT 'Se cambiaron los apellidos de la persona exitosamente'
+        END
 
 END
 GO
@@ -435,11 +463,15 @@ BEGIN
             RETURN
         END
 
-    UPDATE Persona
-    SET Correo = @Correo
-    WHERE Cedula = @Cedula;
 
-    PRINT 'Se cambio el correo de la persona exitosamente'
+     ELSE
+        BEGIN
+            UPDATE Persona
+            SET Correo = @Correo
+            WHERE Cedula = @Cedula;
+
+            PRINT 'Se cambio el correo de la persona exitosamente'
+        END
 
 END
 GO
@@ -458,17 +490,21 @@ BEGIN
             RETURN
         END
     
-    IF @Telefono = ''
+
+     ELSE IF @Telefono = ''
         BEGIN
             PRINT 'No se permiten telefonos vacíos'
             RETURN
         END
 
-    UPDATE Persona
-    SET Telefono = @Telefono
-    WHERE Cedula = @Cedula;
+     ELSE
+        BEGIN
+            UPDATE Persona
+            SET Telefono = @Telefono
+            WHERE Cedula = @Cedula;
 
-    PRINT 'Se cambio el telefono del persona exitosamente'
+            PRINT 'Se cambio el telefono del persona exitosamente'
+        END
 
 END
 GO
@@ -487,17 +523,20 @@ BEGIN
             RETURN
         END
     
-    IF @Tipo != 'C' AND @Tipo != 'V'
+    ELSE IF @Tipo != 'C' AND @Tipo != 'V'
         BEGIN
             PRINT 'Tipo invalido (se permiten los tipos C (cliente) y V (vendedor))'
             RETURN
         END
 
-    UPDATE Persona
-    SET Tipo = @Tipo
-    WHERE Cedula = @Cedula;
+     ELSE
+        BEGIN
+            UPDATE Persona
+            SET Tipo = @Tipo
+            WHERE Cedula = @Cedula;
 
-    PRINT 'Se cambio el rol de la persona exitosamente'
+            PRINT 'Se cambio el rol de la persona exitosamente'
+        END
 
 END
 GO
@@ -516,17 +555,20 @@ BEGIN
             RETURN
         END
     
-    IF @NombreMetodo = ''
+    ELSE IF @NombreMetodo = ''
         BEGIN
             PRINT 'No se permiten nombres vacíos'
             RETURN
         END
 
-    UPDATE Metodo_Pago
-    SET NombreMetodo = @NombreMetodo
-    WHERE IdMetodoPago = @IdMetodoPago;
+     ELSE
+        BEGIN
+            UPDATE Metodo_Pago
+            SET NombreMetodo = @NombreMetodo
+            WHERE IdMetodoPago = @IdMetodoPago;
 
-    PRINT 'Se cambio el nombre del metodo de pago exitosamente'
+            PRINT 'Se cambio el nombre del metodo de pago exitosamente'
+        END
 
 END
 GO
@@ -545,11 +587,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Compra
-    SET Fecha = @Fecha
-    WHERE NumFactura = @NumFactura;
+     ELSE
+        BEGIN
+            UPDATE Compra
+            SET Fecha = @Fecha
+            WHERE NumFactura = @NumFactura;
 
-    PRINT 'Se cambio la fecha de la compra exitosamente'
+            PRINT 'Se cambio la fecha de la compra exitosamente'
+        END
 
 END
 GO
@@ -568,11 +613,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Compra
-    SET Total = @Total
-    WHERE NumFactura = @NumFactura;
+     ELSE
+        BEGIN
+            UPDATE Compra
+            SET Total = @Total
+            WHERE NumFactura = @NumFactura;
 
-    PRINT 'Se cambio el total de la compra exitosamente'
+            PRINT 'Se cambio el total de la compra exitosamente'
+        END
 
 END
 GO
@@ -591,18 +639,20 @@ BEGIN
             RETURN
         END
     
-    IF @CedCliente = ''
+    ELSE IF @CedCliente = ''
         BEGIN
             PRINT 'No se permite una cedula vacia'
             RETURN
         END
 
-    UPDATE Compra
-    SET CedCliente = @CedCliente
-    WHERE NumFactura = @NumFactura;
+     ELSE
+        BEGIN
+            UPDATE Compra
+            SET CedCliente = @CedCliente
+            WHERE NumFactura = @NumFactura;
 
-    PRINT 'Se cambio el cliente de la compra exitosamente'
-
+            PRINT 'Se cambio el cliente de la compra exitosamente'
+        END
 END
 GO
 
@@ -620,18 +670,20 @@ BEGIN
             RETURN
         END
     
-    IF @CedVendedor = ''
+    ELSE IF @CedVendedor = ''
         BEGIN
             PRINT 'No se permite una cedula vacia'
             RETURN
         END
 
-    UPDATE Compra
-    SET CedVendedor = @CedVendedor
-    WHERE NumFactura = @NumFactura;
+     ELSE
+        BEGIN
+            UPDATE Compra
+            SET CedVendedor = @CedVendedor
+            WHERE NumFactura = @NumFactura;
 
-    PRINT 'Se cambio el vendedore de la compra exitosamente'
-
+            PRINT 'Se cambio el vendedore de la compra exitosamente'
+        END
 END
 GO
 
@@ -649,11 +701,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Compra
-    SET IdMetodoPago = @IdMetodoPago
-    WHERE NumFactura = @NumFactura;
+     ELSE
+        BEGIN
+            UPDATE Compra
+            SET IdMetodoPago = @IdMetodoPago
+            WHERE NumFactura = @NumFactura;
 
-    PRINT 'Se cambio el metodo de pago de la compra exitosamente'
+            PRINT 'Se cambio el metodo de pago de la compra exitosamente'
+        END
 
 END
 GO
@@ -672,11 +727,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Carrito_Compra
-    SET Cantidad = @Cantidad
-    WHERE IdCarrito = @IdCarrito;
+     ELSE
+        BEGIN
+            UPDATE Carrito_Compra
+            SET Cantidad = @Cantidad
+            WHERE IdCarrito = @IdCarrito;
 
-    PRINT 'Se cambio la cantidad del carrito exitosamente'
+            PRINT 'Se cambio la cantidad del carrito exitosamente'
+        END
 
 END
 GO
@@ -695,11 +753,14 @@ BEGIN
             RETURN
         END
     
-    UPDATE Carrito_Compra
-    SET SubTotal = @SubTotal
-    WHERE IdCarrito = @IdCarrito;
+     ELSE
+        BEGIN
+            UPDATE Carrito_Compra
+            SET SubTotal = @SubTotal
+            WHERE IdCarrito = @IdCarrito;
 
-    PRINT 'Se cambio el subtotal del carrito exitosamente'
+            PRINT 'Se cambio el subtotal del carrito exitosamente'
+        END
 
 END
 GO
