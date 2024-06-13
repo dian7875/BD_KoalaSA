@@ -674,7 +674,7 @@ BEGIN
     
     UPDATE Carrito_Compra
     SET Cantidad = @Cantidad
-    WHERE NumFactura = @NumFactura;
+    WHERE IdCarrito = @IdCarrito;
 
     PRINT 'Se cambio la cantidad del carrito exitosamente'
 
@@ -697,7 +697,7 @@ BEGIN
     
     UPDATE Carrito_Compra
     SET SubTotal = @SubTotal
-    WHERE NumFactura = @NumFactura;
+    WHERE IdCarrito = @IdCarrito;
 
     PRINT 'Se cambio el subtotal del carrito exitosamente'
 
