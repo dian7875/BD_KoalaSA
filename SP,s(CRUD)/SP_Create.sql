@@ -71,39 +71,57 @@ BEGIN
     END CATCH
 END
 GO
+Drop procedure SP_INGRESAR_TIPO
 
 USE KOALASA
 GO
 CREATE PROCEDURE SP_INGRESAR_TIPO(
     @NNombreTipo VARCHAR(10),
-    @NCodProveedor VARCHAR(10)
+    @NCodProveedor VARCHAR(10),
+	@NGenero CHAR(1)
 )
 AS
 BEGIN
     BEGIN TRANSACTION;
     BEGIN TRY
-        IF(@NNombreTipo = '' OR @NCodProveedor = '')
+        IF(@NNombreTipo = '' OR @NCodProveedor = '' OR @NGenero='')
         BEGIN
             PRINT 'No Se pueden Ingresar Campos En Blanco';
             ROLLBACK TRANSACTION;
             RETURN;
         END
-        IF EXISTS (SELECT 1 FROM Tipo WHERE NombreTipo = @NNombreTipo)
-        BEGIN
-            PRINT 'El Tipo Ya Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-        IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @NCodProveedor)
+		 IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @NCodProveedor)
         BEGIN
             PRINT 'El Proveedor No Existe';
             ROLLBACK TRANSACTION;
             RETURN;
         END
-        INSERT INTO Tipo (NombreTipo, CodProveedor)
-        VALUES (@NNombreTipo, @NCodProveedor);
+		  IF(@NGenero NOT IN ('H', 'M', 'U'))
+        BEGIN
+            PRINT 'El género debe ser H (Hombre), M (Mujer) o U (Unisex)';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        IF EXISTS (SELECT 1 FROM Tipo WHERE NombreTipo = @NNombreTipo AND Genero = @NGenero)
+        BEGIN
+            PRINT 'El tipo ' + @NNombreTipo + ' para ' + 
+            CASE @NGenero 
+                WHEN 'M' THEN 'Mujer' 
+                WHEN 'H' THEN 'Hombre' 
+				WHEN 'U' THEN 'Unisex'
+            END + ' ya existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+       INSERT INTO Tipo (NombreTipo, CodProveedor, Genero)
+        VALUES (@NNombreTipo, @NCodProveedor, @NGenero);
         COMMIT TRANSACTION;
-        PRINT 'Tipo '+@NNombreTipo+' Registrado Correctamente';
+        PRINT 'Tipo ' + @NNombreTipo + ' para ' + 
+        CASE @NGenero 
+            WHEN 'M' THEN 'Mujer' 
+            WHEN 'H' THEN 'Hombre' 
+			WHEN 'U' THEN 'Unisex'
+        END + ' registrado correctamente';
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
@@ -225,6 +243,79 @@ BEGIN
     END CATCH
 END
 GO
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_INGRESAR_ZAPATO_POR_NOMBRE(
+    @NNombreTipo VARCHAR(20),
+    @NNombreColor VARCHAR(20),
+    @NTalla INT,
+    @NPrecioUnitario MONEY
+)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        IF (@NNombreTipo = '' OR @NNombreColor = '' OR @NTalla = '' OR @NPrecioUnitario = '')
+        BEGIN
+            PRINT 'No se pueden ingresar campos en blanco';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        IF(@NTalla < 1)
+        BEGIN
+            PRINT 'Las tallas no pueden ser ni 0 ni números negativos. En caso de talla a la medida, digite 99';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        DECLARE @NCodColor INT;
+        SELECT @NCodColor = CodigoColor FROM Color WHERE NombreColor = @NNombreColor;
+        IF (@NCodColor IS NULL)
+        BEGIN
+            PRINT 'El color no existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        DECLARE @NCodTipo INT;
+        SELECT @NCodTipo = CodigoTipo FROM Tipo WHERE NombreTipo = @NNombreTipo;
+        IF (@NCodTipo IS NULL)
+        BEGIN
+            PRINT 'El tipo no existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        DECLARE @NCodigoZapato VARCHAR(20);
+        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + '-' + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR);
+        IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
+        BEGIN
+            PRINT 'El zapato ya existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        INSERT INTO Zapato (CodigoZapato, CodTipo, CodColor, Talla, PrecioUnitario)
+        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario);
+        COMMIT TRANSACTION;
+        PRINT 'Zapato registrado correctamente. Código de zapato: ' 
+        + CAST(@NCodigoZapato AS VARCHAR)
+        + ', Tipo: ' + @NNombreTipo
+        + ', Color: ' + @NNombreColor 
+        + ', Talla: ' + CAST(@NTalla AS VARCHAR);
+        
+        IF (@NTalla = 99)
+            PRINT 'Talla a la medida';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+    END CATCH
+END
+GO
+
 
 USE KOALASA
 GO

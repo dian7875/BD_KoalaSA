@@ -18,6 +18,7 @@ CREATE TABLE Tipo (
     CodigoTipo INT NOT NULL IDENTITY (1,1),
     NombreTipo VARCHAR(10) NOT NULL,
     CodProveedor VARCHAR(10) NOT NULL,
+    Genero Char(1) NOT NULL,
     CONSTRAINT FK_TipoProveedor_CodProveedor
     FOREIGN KEY (CodProveedor) REFERENCES Proveedor(CodigoProveedor)
 	ON DELETE CASCADE
@@ -77,7 +78,6 @@ USE KOALASA
 GO
 CREATE TABLE Persona (
 	Cedula VARCHAR(15) NOT NULL,
-	Cedula Varchar(15) not null,
 	Nombre varchar(20) not null,
 	Apellido1 varchar(20) not null,
 	Apellido2 varchar(20) null,

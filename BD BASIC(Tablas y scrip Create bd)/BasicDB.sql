@@ -116,6 +116,25 @@ go
 use master
 go
 alter database KOALASA
+add FILEGROUP Auditoras
+go
+
+use master
+go
+alter database KOALASA
+add file 
+(
+Name = 'RegistroAuditorias_Data',
+filename='C:\SQLData\RegistroAuditorias_Data.ndf',
+Size = 4MB,
+MaxSize= 11MB,
+Filegrowth= 3MB
+)to filegroup Ventas
+go
+
+use master
+go
+alter database KOALASA
 add FILEGROUP Proveedores
 go
 
