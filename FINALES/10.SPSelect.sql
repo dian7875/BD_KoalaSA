@@ -18,8 +18,8 @@ BEGIN
     FROM 
         Vw_Proveedor
     WHERE 
-        [Estado del Proveedor] = @Estado;
-END;
+        [Estado del Proveedor] = @Estado
+END
 GO
 
 USE KOALASA
@@ -41,8 +41,8 @@ BEGIN
     FROM 
         Vw_Proveedor
     WHERE 
-        [Nombre del Proveedor] LIKE '%' + @Nombre + '%';
-END;
+        [Nombre del Proveedor] LIKE '%' + @Nombre + '%'
+END
 GO
 
 USE KOALASA
@@ -64,8 +64,8 @@ BEGIN
     FROM 
         Vw_Proveedor
     WHERE 
-        [Codigo de Proveedor] = @codigoProveedor;
-END;
+        [Codigo de Proveedor] = @codigoProveedor
+END
 GO
 
 USE KOALASA
@@ -87,8 +87,8 @@ BEGIN
     FROM 
         Vw_Proveedor
     WHERE 
-        [Cedula Juridica] = @cedulaJuridica;
-END;
+        [Cedula Juridica] = @cedulaJuridica
+END
 GO
 
 USE KOALASA
@@ -110,7 +110,7 @@ BEGIN
 	Join Vw_Tipo T on P.[Codigo de Proveedor] = T.[Codigo del Proveedor]
     WHERE 
 	P.[Codigo de Proveedor] = @codigo_proveedor
-END;
+END
 GO
 
 
@@ -137,7 +137,7 @@ JOIN Vw_Color C on Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 Where C.[Nombre Del Color] = @Nombre_Color order by [Nombre Del Color]
-END;
+END
 GO
 
 USE KOALASA
@@ -163,7 +163,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Z.[Codigo de Zapato]=@CodigoZapato
-END;
+END
 GO
 
 USE KOALASA
@@ -190,7 +190,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Z.[Precio Unitario] BETWEEN @MINIMO AND @MAXIMO ORDER BY [Precio Unitario] ASC
-END;
+END
 GO
 
 
@@ -217,7 +217,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Z.Talla = @TALLA ORDER BY Talla ASC
-END;
+END
 GO
 
 
@@ -245,7 +245,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Z.Talla BETWEEN @TALLAMIN and @TALLAMAX ORDER BY Talla ASC
-END;
+END
 GO
 
 USE KOALASA
@@ -271,7 +271,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Existencias > @CANTIDADSTOCK ORDER BY Existencias ASC
-END;
+END
 GO
 
 USE KOALASA
@@ -297,7 +297,7 @@ JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
 JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 WHERE Existencias < @CANTIDADSTOCK ORDER BY Existencias ASC
-END;
+END
 GO
 
 USE KOALASA
@@ -324,7 +324,7 @@ JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
 JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 JOIN Vw_Proveedor P ON T.[Codigo del Proveedor] = P.[Codigo de Proveedor]
 WHERE @CODIGOPROVEEEDOR = [Codigo de Proveedor]
-END;
+END
 GO
 
 USE KOALASA
@@ -337,7 +337,7 @@ BEGIN
                    FROM Vw_Persona
                    WHERE Cedula = @CEDULA)
     BEGIN
-        PRINT 'No existe ninguna persona con la cédula ' + @CEDULA + '.';
+        PRINT 'No existe ninguna persona con la cédula ' + @CEDULA + '.'
     END
 ElSE
 BEGIN
@@ -358,7 +358,7 @@ BEGIN
 		FROM Vw_Persona
 		WHERE  @CEDULA = Cedula
 	END
-END;
+END
 GO
 
 USE KOALASA
@@ -393,7 +393,7 @@ BEGIN
 	FROM Vw_Persona
 	WHERE Tipo = @TIPO;
 	END
-END;
+END
 GO
 
 --Personas Nombre(busqueda grande)
@@ -406,7 +406,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Persona WHERE Nombre = @Nombre)
     BEGIN
-        PRINT 'No existe ninguna persona Nombre: ' + @Nombre;
+        PRINT 'No existe ninguna persona Nombre: ' + @Nombre
     END
     ELSE
     BEGIN
@@ -427,7 +427,7 @@ BEGIN
         WHERE 
             Nombre = @Nombre;
     END
-END;
+END
 GO
 
 
@@ -460,9 +460,9 @@ BEGIN
         FROM 
             Vw_Persona
         WHERE 
-           [Primer Apellido] = @Apellido or [Segundo Apellido]=@Apellido;
+           [Primer Apellido] = @Apellido or [Segundo Apellido]=@Apellido
     END
-END;
+END
 GO
 
 --Compras por cliente Cedula
@@ -474,7 +474,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE @CEDULA = [Cedula Cliente] )
     BEGIN
-        PRINT 'No existe ninguna compra asociada a la cedula cliente : ' + @CEDULA;
+        PRINT 'No existe ninguna compra asociada a la cedula cliente : ' + @CEDULA
     END
     ELSE
     BEGIN
@@ -487,7 +487,7 @@ BEGIN
         WHERE 
           C.[Cedula Cliente] = @CEDULA
     END
-END;
+END
 GO
 
 --Vendedor del mes
@@ -503,7 +503,7 @@ BEGIN
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
     BEGIN
@@ -524,7 +524,7 @@ BEGIN
 		Order By
 			SUM(C.Total) DESC;
     END
-END;
+END
 GO
 
 --Comprador del Mes
@@ -540,7 +540,7 @@ BEGIN
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
     BEGIN
@@ -561,7 +561,7 @@ BEGIN
 		ORDER BY 
 			SUM(C.Total) DESC;
     END
-END;
+END
 GO
 
 --Ventas del mes
@@ -577,7 +577,7 @@ BEGIN
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
     BEGIN
@@ -588,7 +588,7 @@ BEGIN
         WHERE 
             Fecha BETWEEN @INICIO AND @FIN;
     END
-END;
+END
 GO
 
 USE KOALASA
@@ -603,7 +603,7 @@ BEGIN
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
    BEGIN
@@ -626,7 +626,7 @@ BEGIN
         ORDER BY 
             C.Total DESC;
 		END
-END;
+END
 GO
 
 --Articulos por cedula de comprador
@@ -638,7 +638,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE @CEDULA = [Cedula Cliente] )
     BEGIN
-        PRINT 'No existe ninguna Articulo comprado por el cliente cedula  : ' + @CEDULA;
+        PRINT 'No existe ninguna Articulo comprado por el cliente cedula  : ' + @CEDULA
     END
     ELSE
     BEGIN
@@ -657,7 +657,7 @@ BEGIN
         WHERE 
           C.[Cedula Cliente] = @CEDULA
     END
-END;
+END
 GO
 --Compras por vendedor Cedula
 USE KOALASA
@@ -668,7 +668,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE @CEDULA = [Cedula Vendedor] )
     BEGIN
-        PRINT 'No existe ninguna Venta asociada al Vendedor : ' + @CEDULA;
+        PRINT 'No existe ninguna Venta asociada al Vendedor : ' + @CEDULA
     END
     ELSE
     BEGIN
@@ -681,7 +681,7 @@ BEGIN
         WHERE 
           C.[Cedula Vendedor] = @CEDULA
     END
-END;
+END
 GO
 --Basica numero de factura
 USE KOALASA
@@ -692,7 +692,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE [Numero de Factura] = @NumFactura )
     BEGIN
-        PRINT 'No existe ninguna Compra asociada a la Factura: ' + CAST(@NumFactura AS Varchar);
+        PRINT 'No existe ninguna Compra asociada a la Factura: ' + CAST(@NumFactura AS Varchar)
     END
     ELSE
     BEGIN
@@ -705,7 +705,7 @@ BEGIN
         WHERE 
           [Numero de Factura] = @NumFactura
     END
-END;
+END
 GO
 --Articulos por numero de factura
 
@@ -717,7 +717,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE @NUMFACTURA = [Numero de Factura] )
     BEGIN
-        PRINT 'No existe la factura : ' + CAST(@NUMFACTURA AS VARCHAR);
+        PRINT 'No existe la factura : ' + CAST(@NUMFACTURA AS VARCHAR)
     END
     ELSE
     BEGIN
@@ -736,7 +736,7 @@ BEGIN
         WHERE 
           C.[Numero de Factura] = @NUMFACTURA
     END
-END;
+END
 GO
 
 --Rango de fechas
@@ -750,7 +750,7 @@ AS
 BEGIN 
 	IF NOT EXISTS (SELECT 1 FROM Vw_Compra WHERE Fecha BETWEEN @INICIO AND @FIN )
     BEGIN
-        PRINT 'No existe ninguna Compra en esas Fechas: ';
+        PRINT 'No existe ninguna Compra en esas Fechas: '
     END
     ELSE
     BEGIN
@@ -763,7 +763,7 @@ BEGIN
         WHERE 
              C.Fecha BETWEEN @INICIO AND @FIN;
     END
-END;
+END
 GO
 
 --Por metodo de pago
@@ -775,12 +775,12 @@ AS
 BEGIN 
   DECLARE @INICIO DATE, @FIN DATE;
     SET @FIN = GETDATE();
-    SET @INICIO = DATEADD(DAY, -30, @FIN);
+    SET @INICIO = DATEADD(DAY, -30, @FIN)
     IF NOT EXISTS (SELECT 1 
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
     BEGIN
@@ -798,7 +798,7 @@ BEGIN
         ORDER BY 
              SUM(C.Total) DESC;
     END
-END;
+END
 GO
 
 --Ventas por metodo de pago
@@ -814,7 +814,7 @@ BEGIN
                    FROM Vw_Compra
                    WHERE Fecha BETWEEN @INICIO AND @FIN)
     BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.'
     END
     ELSE
     BEGIN
@@ -832,7 +832,7 @@ BEGIN
         ORDER BY 
               SUM(C.Total) DESC;
     END
-END;
+END
 GO
 
 --Ventas por zapatos
@@ -844,7 +844,7 @@ AS
 BEGIN 
     IF NOT EXISTS (SELECT 1 FROM Vw_Compra)
     BEGIN
-        PRINT 'No existe ninguna venta registrada.';
+        PRINT 'No existe ninguna venta registrada.'
     END
     ELSE
     BEGIN
@@ -860,9 +860,9 @@ BEGIN
         GROUP BY 
             Z.[Codigo de Zapato], Z.[Precio Unitario]
         ORDER BY 
-            SUM(CC.Cantidad * Z.[Precio Unitario]) DESC;
+            SUM(CC.Cantidad * Z.[Precio Unitario]) DESC
     END
-END;
+END
 GO
 
 USE KOALASA
@@ -873,7 +873,7 @@ AS
 BEGIN 
     IF NOT EXISTS (SELECT 1 FROM Vw_Zapato WHERE [Codigo de Zapato] = @CodigoZapato)
     BEGIN
-        PRINT 'No existen ventas registradas para el zapato con Código ' +@CodigoZapato;
+        PRINT 'No existen ventas registradas para el zapato con Código ' +@CodigoZapato
     END
     ELSE
     BEGIN
@@ -892,9 +892,9 @@ BEGIN
         GROUP BY 
             Z.[Codigo de Zapato], Z.[Precio Unitario]
         ORDER BY 
-             SUM(CC.Cantidad * Z.[Precio Unitario]) DESC;
+             SUM(CC.Cantidad * Z.[Precio Unitario]) DESC
     END
-END;
+END
 GO
 
 
@@ -928,7 +928,7 @@ BEGIN
 			S.Existencias > 0
 			ORDER BY
 			[Precio Unitario] ASC
-    END;
+    END
 GO
 
 EXECUTE SP_CATALO_DE_ZAPATOS_POR_GENERO 'H'
@@ -941,8 +941,8 @@ AS
 BEGIN 
    IF @GENERO NOT IN ('H', 'M', 'U')
     BEGIN
-        PRINT 'El parámetro @GENERO debe ser especificado como ''H'' (Hombre), ''M'' (Mujer), o ''U'' (Unisex).';
-        RETURN;
+        PRINT 'El parámetro @GENERO debe ser especificado como ''H'' (Hombre), ''M'' (Mujer), o ''U'' (Unisex).'
+        RETURN
     END
     SELECT 
           Z.[Codigo de Zapato],
@@ -975,8 +975,8 @@ BEGIN
                   WHEN @GENERO = 'H' THEN 'Hombre'
                   WHEN @GENERO = 'M' THEN 'Mujer'
                   WHEN @GENERO = 'U' THEN 'Unisex'
-              END + '.';
+              END + '.'
     END
- END;
+ END
 GO
 

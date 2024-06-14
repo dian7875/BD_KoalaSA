@@ -78,13 +78,13 @@ GO
 Create View Vw_Persona
 as
 Select
-	Cedula ,
-	Nombre ,
-	Apellido1 as 'Primer Apellido',
-	Apellido2 as 'Segundo Apellido',
-	Correo ,
-	Telefono,
-	Tipo 
+Cedula ,
+Nombre ,
+Apellido1 as 'Primer Apellido',
+Apellido2 as 'Segundo Apellido',
+Correo ,
+Telefono,
+Tipo 
 from Persona
 GO
 
