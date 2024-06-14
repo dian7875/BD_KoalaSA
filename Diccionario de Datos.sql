@@ -7,12 +7,12 @@ SELECT
     c.COLUMN_NAME AS 'Nombre de la columna',
     c.DATA_TYPE AS 'Tipo de Dato',
     c.CHARACTER_MAXIMUM_LENGTH AS 'Caracteres Maximos',
-    c.IS_NULLABLE AS 'Nunable?',
+    c.IS_NULLABLE AS 'Nullable',
     CASE 
-        WHEN pk.COLUMN_NAME IS NOT NULL THEN 'PRIMARY KEY'
-        ELSE ''
-    END AS PrimaryKey,
-    fk.CONSTRAINT_NAME AS 'Llave Foranea',
+        WHEN pk.COLUMN_NAME IS NOT NULL THEN 'YES'
+        ELSE 'NO'
+    END AS 'Llave Primaria',
+    fk.CONSTRAINT_NAME AS 'Llave Foránea',
     fk.REFERENCED_TABLE_NAME AS 'Tabla de Referencia',
     fk.REFERENCED_COLUMN_NAME AS 'Columna de Referencia'
 FROM 
