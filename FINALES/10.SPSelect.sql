@@ -488,7 +488,7 @@ BEGIN
           C.[Cedula Cliente] = @CEDULA
     END
 END;
-
+GO
 
 --Vendedor del mes
 USE KOALASA
@@ -563,6 +563,7 @@ BEGIN
     END
 END;
 GO
+
 --Ventas del mes
 USE KOALASA
 GO
@@ -764,7 +765,6 @@ BEGIN
     END
 END;
 GO
-EXEC SP_COMPRA_POR_RANGO_FECHAS'2024-01-01', '2024-06-30';
 
 --Por metodo de pago
 
@@ -931,6 +931,7 @@ BEGIN
     END;
 GO
 
+EXECUTE SP_CATALO_DE_ZAPATOS_POR_GENERO 'H'
 
 USE KOALASA
 GO

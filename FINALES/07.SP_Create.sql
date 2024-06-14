@@ -210,7 +210,7 @@ BEGIN
             RETURN;
         END
         DECLARE @NCodigoZapato VARCHAR(20)
-        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
+        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) +'-'+ CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
         IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
         BEGIN
             PRINT 'El Zapato Ya Existe';
@@ -533,8 +533,8 @@ GO
 USE KOALASA
 GO
 CREATE PROCEDURE SP_GENERAR_COMPRA(
-    @CodigoCliente INT,
-    @CodigoVendedor INT,
+    @CedCliente Varchar(15),
+    @CedVendedor varchar(15),
     @IdMetodoPago INT
 )
 AS
@@ -547,13 +547,13 @@ BEGIN
             ROLLBACK TRANSACTION;
             RETURN;
         END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CodigoVendedor AND Tipo = 'V')
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
         BEGIN
             PRINT 'El vendedor no es válido';
             ROLLBACK TRANSACTION;
             RETURN;
         END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CodigoCliente AND Tipo = 'C')
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedCliente AND Tipo = 'C')
         BEGIN
             PRINT 'El cliente no es válido';
             ROLLBACK TRANSACTION;
@@ -570,7 +570,7 @@ BEGIN
         FROM Carrito_Compra
         WHERE NumFactura IS NULL;
         INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
-        VALUES (GETDATE(), @Total, @CodigoCliente, @CodigoVendedor, @IdMetodoPago);
+        VALUES (GETDATE(), @Total, @CedCliente, @CedVendedor, @IdMetodoPago);
         DECLARE @NumFactura INT;
         SET @NumFactura = SCOPE_IDENTITY();
         UPDATE Carrito_Compra
@@ -596,7 +596,7 @@ GO
 USE KOALASA
 GO
 CREATE PROCEDURE SP_COMPRA_COMO_VENDEDOR(
-    @CodigoVendedor INT,
+    @CedVendedor VARCHAR(15),
     @IdMetodoPago INT
 )
 AS
@@ -609,7 +609,7 @@ BEGIN
             ROLLBACK TRANSACTION;
             RETURN;
         END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CodigoVendedor AND Tipo = 'V')
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
         BEGIN
             PRINT 'El vendedor no es válido';
             ROLLBACK TRANSACTION;
@@ -626,7 +626,7 @@ BEGIN
         FROM Carrito_Compra
         WHERE NumFactura IS NULL;
         INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
-        VALUES (GETDATE(), @Total, @CodigoVendedor, @CodigoVendedor, @IdMetodoPago);
+        VALUES (GETDATE(), @Total, @CedVendedor, @CedVendedor, @IdMetodoPago);
         DECLARE @NumFactura INT;
         SET @NumFactura = SCOPE_IDENTITY();
         UPDATE Carrito_Compra
