@@ -1,5 +1,5 @@
 ---Tablas de auditoria
-USE KOALASA;
+USE KOALASA
 GO
 CREATE TABLE Audit_Color (
     AudID INT IDENTITY(1,1),
@@ -11,7 +11,7 @@ CREATE TABLE Audit_Color (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_COLOR_ID
 	PRIMARY KEY CLUSTERED(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 
@@ -28,7 +28,7 @@ CREATE TABLE Audit_Tipo (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_TIPO_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -44,7 +44,7 @@ CREATE TABLE Audit_Proveedor (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_PROVEEDOR_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -59,7 +59,7 @@ CREATE TABLE Audit_Zapato (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_ZAPATO_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 
@@ -75,7 +75,7 @@ CREATE TABLE Audit_Stock (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_Stock_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -92,7 +92,7 @@ CREATE TABLE Audit_Persona (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_Persona_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -106,7 +106,7 @@ CREATE TABLE Audit_Metodo_Pago (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_MPAGO_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -123,7 +123,7 @@ CREATE TABLE Audit_Compra (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_COMPRA_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
 
 Use KOALASA
@@ -141,5 +141,5 @@ CREATE TABLE Audit_Carrito_Compra (
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_CARRITO_COMPRA_ID
 	PRIMARY KEY clustered(AudID)
-)ON Auditorias;
+)ON Auditorias
 GO
