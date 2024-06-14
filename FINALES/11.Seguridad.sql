@@ -1,10 +1,11 @@
 
 USE KOALASA;
+GO
 SELECT name
 FROM sys.procedures
 WHERE type = 'P'
 ORDER BY name;
-
+GO
 
 
 USE KOALASA
