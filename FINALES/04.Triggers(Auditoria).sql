@@ -1,3 +1,4 @@
+--Parte 4 Triggers
 USE KOALASA
 GO
 CREATE TRIGGER trg_Audit_Color
@@ -14,7 +15,7 @@ BEGIN
     SET @User = SYSTEM_USER;
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoColor, NombreColor FROM inserted) AND NOT EXISTS (SELECT  CodigoColor, NombreColor FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -24,7 +25,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoColor, NombreColor FROM inserted) AND EXISTS (SELECT CodigoColor, NombreColor FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -34,7 +35,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT CodigoColor, NombreColor FROM deleted) AND NOT EXISTS (SELECT CodigoColor, NombreColor FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -63,7 +64,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM inserted) AND NOT EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -73,7 +74,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM inserted) AND EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -83,7 +84,7 @@ BEGIN
     END;
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM deleted) AND NOT EXISTS (SELECT CodigoTipo, NombreTipo, CodProveedor FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -109,7 +110,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM inserted) AND NOT EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -119,7 +120,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM inserted) AND EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -129,7 +130,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM deleted) AND NOT EXISTS (SELECT  CodigoProveedor, NombreProv, CedulaJuridica FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -155,7 +156,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoZapato, PrecioUnitario FROM inserted) AND NOT EXISTS (SELECT CodigoZapato, PrecioUnitario FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -165,7 +166,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoZapato, PrecioUnitario FROM inserted) AND EXISTS (SELECT CodigoZapato, PrecioUnitario FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -175,7 +176,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT CodigoZapato, PrecioUnitario FROM deleted) AND NOT EXISTS (SELECT CodigoZapato, PrecioUnitario FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -197,7 +198,7 @@ BEGIN
     DECLARE @User NVARCHAR(128)
     DECLARE @TableName NVARCHAR(100) = 'Stock'
  -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoZapato, Existencias FROM inserted) AND NOT EXISTS (SELECT CodigoZapato, Existencias FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -207,7 +208,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT CodigoZapato, Existencias FROM inserted) AND EXISTS (SELECT CodigoZapato, Existencias FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -217,7 +218,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT CodigoZapato, Existencias FROM deleted) AND NOT EXISTS (SELECT CodigoZapato, Existencias FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -243,7 +244,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM inserted) AND NOT EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -253,7 +254,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM inserted) AND EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -263,7 +264,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM deleted) AND NOT EXISTS (SELECT Cedula, Nombre, Apellido1, Tipo FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -289,7 +290,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT NombreMetodo FROM inserted) AND NOT EXISTS (SELECT NombreMetodo FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -299,7 +300,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT NombreMetodo FROM inserted) AND EXISTS (SELECT NombreMetodo FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -309,7 +310,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT NombreMetodo FROM deleted) AND NOT EXISTS (SELECT NombreMetodo FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -336,7 +337,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM inserted) AND NOT EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -346,7 +347,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM inserted) AND EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -356,7 +357,7 @@ BEGIN
     END
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM deleted) AND NOT EXISTS (SELECT  NumFactura, Total, CedCliente, CedVendedor FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
@@ -381,7 +382,7 @@ BEGIN
     SET @User = SYSTEM_USER
 
     -- INSERT
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM inserted) AND NOT EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM deleted)
     BEGIN
         SET @Operacion = 'INSERT'
 
@@ -391,7 +392,7 @@ BEGIN
     END
 
     -- UPDATE
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
+    IF EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM inserted) AND EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM deleted)
     BEGIN
         SET @Operacion = 'UPDATE'
 
@@ -401,13 +402,19 @@ BEGIN
     END;
 
     -- DELETE
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
+    IF EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM deleted) AND NOT EXISTS (SELECT  IdCarrito, NumFactura, IdStock, Cantidad, SubTotal FROM inserted)
     BEGIN
         SET @Operacion = 'DELETE'
 
         INSERT INTO Audit_Carrito_Compra (NombreTabla, Operacion, IdCarrito, NumFactura, IdStock, Cantidad, SubTotal, RealizadoPor, FechaDeEjecucion)
         SELECT @TableName, @Operacion, IdCarrito, NumFactura, IdStock, Cantidad, SubTotal, @User, GETDATE()
         FROM deleted
+
+		UPDATE s
+        SET s.Existencias = s.Existencias + d.Cantidad
+        FROM Stock s
+        INNER JOIN deleted d ON s.IdStock = d.IdStock
+        WHERE d.NumFactura IS NULL;
     END
 END
 GO

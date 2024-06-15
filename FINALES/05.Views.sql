@@ -1,4 +1,5 @@
 ---VIEW DE TABLAS
+--Parte 5 Views
 Use KOALASA
 GO
 Create View Vw_Proveedor
@@ -143,6 +144,8 @@ JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 JOIN Vw_Proveedor P ON T.[Codigo del Proveedor] = P.[Codigo de Proveedor]
 GO
 
+USE KOALASA
+GO
 Create view Vw_C_I_VCMZ
 AS
 SELECT
@@ -154,4 +157,136 @@ FROM Vw_Compra C
 JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
 JOIN Vw_Z_CTSP Z ON Z.[Codigo en Inventario] = CC.[Çodigo en Inventario]
 JOIN Vw_MPago MP ON MP.[Codigo de metodo de pago] = C.[Metodo de pago]
+GO
+--Vw Auditorias
+
+USE KOALASA
+GO
+Create view Vw_Audit_proveedor
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+	CodigoProveedor as 'Codigo de Proveedor',
+	NombreProv as 'Nombre del Proveedor',
+	CedulaJuridica as 'Cedula Juridica',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Proveedor
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Color
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    CodigoColor As 'Codigo de Color',
+	NombreColor As 'Nombre Del Color',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Color
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Tipo
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    CodigoTipo AS 'Codigo del Tipo',
+	NombreTipo As 'Nombre Del Tipo',
+	CodProveedor As 'Codigo del Proveedor',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Tipo
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Zapato
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    CodigoZapato as 'Codigo de Zapato',
+	PrecioUnitario As 'Precio Unitario',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Zapato
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Stock
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    CodigoZapato as 'Codigo De Zapato',
+    Existencias,
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Stock
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Persona
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    Cedula ,
+	Nombre ,
+	Apellido1 as 'Primer Apellido',
+	Tipo,
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Persona
+GO
+
+
+USE KOALASA
+GO
+Create view Vw_Audit_Compra
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    NumFactura as 'Numero de Factura',
+    FechaDeEjecucion,
+    Total,
+    CedCliente 'Cedula Cliente',
+	CedVendedor 'Cedula Vendedor',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Compra 
+GO
+
+USE KOALASA
+GO
+Create view Vw_Audit_Carrito
+AS
+Select
+	AudID AS 'Identificador De Auditoria',
+	NombreTabla AS 'Nombre de la tabla',
+    Operacion,
+    IdCarrito  'Codigo de carrito',
+	NumFactura  'Numero de Factura',
+    IdStock  as 'Çodigo en Inventario',
+	Cantidad  ,
+	SubTotal  As 'Sub Total',
+    RealizadoPor 'Responsable',
+    FechaDeEjecucion 'Fecha de Ejecucion'
+From Audit_Carrito_Compra
 GO

@@ -1,94 +1,3 @@
--- Proveedor
-USE KOALASA
-GO
-CREATE PROCEDURE SP_EDITARTELEFONO_PROVEEDOR(
-@CodigoProveedor VARCHAR(10),
-@NTelefono VARCHAR(20)
-)
-AS
-IF(@CodigoProveedor='' OR @NTelefono='')
-    BEGIN
-    PRINT 'No Se pueden Ingresar Campos En Blanco'
-    RETURN
-END
-IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
-    BEGIN
-    PRINT 'El Proveedor NO Existe'
-    RETURN
-    END
-ELSE
-BEGIN
-    UPDATE Proveedor 
-    SET Telefono = @NTelefono
-	WHERE CodigoProveedor = @CodigoProveedor
-    PRINT 'Telefono del proveedor actualizado Correctamente'
-END
-GO
-Execute SP_EDITARTELEFONO_PROVEEDOR 'P-0687','NTELEFONO'
-
-select * from Proveedor
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_EDITARCORREO_PROVEEDOR(
-@CodigoProveedor VARCHAR(10),
-@NCorreo VARCHAR(30)
-)
-AS
-IF(@CodigoProveedor='' OR @NCorreo='')
-    BEGIN
-    PRINT 'No Se pueden Ingresar Campos En Blanco'
-    RETURN
-END
-IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
-    BEGIN
-    PRINT 'El Proveedor NO Existe'
-    RETURN
-    END
-ELSE
-BEGIN
-    UPDATE Proveedor 
-    SET Correo = @NCorreo
-	WHERE CodigoProveedor = @CodigoProveedor
-    PRINT 'Correo del proveedor actualizado Correctamente'
-END
-GO
-
-
-Execute SP_EDITARCORREO_PROVEEDOR 'P-0687','NCORREO'
-
-select * from Proveedor
-
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_EDITARNOMBRE_PROVEEDOR(
-@CodigoProveedor VARCHAR(10),
-@NNombreProveedor VARCHAR(20)
-)
-AS
-IF(@CodigoProveedor='' OR @NNombreProveedor='')
-    BEGIN
-    PRINT 'No Se pueden Ingresar Campos En Blanco'
-    RETURN
-END
-IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
-    BEGIN
-    PRINT 'El Proveedor NO Existe'
-    RETURN
-    END
-ELSE
-BEGIN
-    UPDATE Proveedor 
-    SET NombreProv = @NNombreProveedor
-	WHERE CodigoProveedor = @CodigoProveedor
-    PRINT 'Nombre del proveedor actualizado Correctamente'
-END
-GO
-Execute SP_EDITARNOMBRE_PROVEEDOR'P-0687','NNombre'
-
-select * from Proveedor
-
 
 USE KOALASA
 GO
@@ -119,10 +28,6 @@ BEGIN
 END
 GO
 
-execute SP_BAJA_PROVEEDOR 'P-0687'
-select * from Proveedor
-
-
 USE KOALASA
 GO
 CREATE PROCEDURE SP_REACTIVAR_PROVEEDOR(
@@ -151,9 +56,110 @@ BEGIN
     END
 END
 GO
+CREATE PROCEDURE SP_EDITAR_APELLIDOS_PERSONA @Cedula VARCHAR(15), @Apellido1 VARCHAR(20), @Apellido2 VARCHAR(20) = NULL
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @Apellido1 = '' OR @Apellido2 = ''
+        BEGIN
+            PRINT 'No se permiten apellidos vacíos (si se desea omitir el segundo apellido, simplemente omitalo en los argumentos)'
+            RETURN
+        END
 
-Execute SP_REACTIVAR_PROVEEDOR 'P-0687'
-select * from Proveedor
+    ELSE
+        BEGIN
+            UPDATE Persona
+            SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
+            WHERE Cedula = @Cedula;
+
+            PRINT 'Se cambiaron los apellidos de la persona exitosamente'
+        END
+
+END
+GO
+-- Proveedor
+USE KOALASA
+GO
+CREATE PROCEDURE SP_EDITARTELEFONO_PROVEEDOR(
+@CodigoProveedor VARCHAR(10),
+@NTelefono VARCHAR(20)
+)
+AS
+IF(@CodigoProveedor='' OR @NTelefono='')
+    BEGIN
+    PRINT 'No Se pueden Ingresar Campos En Blanco'
+    RETURN
+END
+IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
+    BEGIN
+    PRINT 'El Proveedor NO Existe'
+    RETURN
+    END
+ELSE
+BEGIN
+    UPDATE Proveedor 
+    SET Telefono = @NTelefono
+	WHERE CodigoProveedor = @CodigoProveedor
+    PRINT 'Telefono del proveedor actualizado Correctamente'
+END
+GO
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_EDITARCORREO_PROVEEDOR(
+@CodigoProveedor VARCHAR(10),
+@NCorreo VARCHAR(30)
+)
+AS
+IF(@CodigoProveedor='' OR @NCorreo='')
+    BEGIN
+    PRINT 'No Se pueden Ingresar Campos En Blanco'
+    RETURN
+END
+IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
+    BEGIN
+    PRINT 'El Proveedor NO Existe'
+    RETURN
+    END
+ELSE
+BEGIN
+    UPDATE Proveedor 
+    SET Correo = @NCorreo
+	WHERE CodigoProveedor = @CodigoProveedor
+    PRINT 'Correo del proveedor actualizado Correctamente'
+END
+GO
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_EDITARNOMBRE_PROVEEDOR(
+@CodigoProveedor VARCHAR(10),
+@NNombreProveedor VARCHAR(20)
+)
+AS
+IF(@CodigoProveedor='' OR @NNombreProveedor='')
+    BEGIN
+    PRINT 'No Se pueden Ingresar Campos En Blanco'
+    RETURN
+END
+IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @CodigoProveedor)
+    BEGIN
+    PRINT 'El Proveedor NO Existe'
+    RETURN
+    END
+ELSE
+BEGIN
+    UPDATE Proveedor 
+    SET NombreProv = @NNombreProveedor
+	WHERE CodigoProveedor = @CodigoProveedor
+    PRINT 'Nombre del proveedor actualizado Correctamente'
+END
+GO
 
 -- Tipo
 
@@ -356,24 +362,28 @@ GO
 USE KOALASA
 GO
 
-CREATE PROCEDURE SP_EDITAR_EXISTENCIAS_STOCK @IdStock INT, @Existencias INT
+CREATE PROCEDURE SP_EDITAR_EXISTENCIAS_STOCK @CodigoZapato Varchar(15), @Existencias INT
 AS
 BEGIN
-    IF NOT EXISTS(SELECT 1 FROM STOCK WHERE IdStock = @IdStock)
+    IF NOT EXISTS(SELECT 1 FROM STOCK WHERE CodigoZapato = @CodigoZapato)
         BEGIN
-            PRINT 'El stock no existe'
-            RETURN
-        END
-    
-     ELSE
-        BEGIN
-            UPDATE Stock
-            SET Existencias = @Existencias
-            WHERE IdStock = @IdStock;
+        PRINT 'El Zapato no existe en stock';
+        RETURN;
+    END
+    ELSE
+    BEGIN
+        UPDATE Stock
+        SET Existencias = @Existencias
+        WHERE CodigoZapato = @CodigoZapato;
 
-            PRINT 'Se cambiaron las existencias del stock exitosamente'
-        END
+        DECLARE @NuevaExistencia INT;
 
+        SELECT @NuevaExistencia = Existencias
+        FROM Stock
+        WHERE CodigoZapato = @CodigoZapato;
+
+        PRINT 'Se cambiaron las existencias del stock exitosamente. Ahora el zapato cuenta con ' + CAST(@NuevaExistencia AS VARCHAR) + ' existencias.';
+    END
 END
 GO
 
@@ -413,34 +423,6 @@ GO
 
 USE KOALASA
 GO
-
-CREATE PROCEDURE SP_EDITAR_APELLIDOS_PERSONA @Cedula VARCHAR(15), @Apellido1 VARCHAR(20), @Apellido2 VARCHAR(20) = NULL
-AS
-BEGIN
-    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
-        BEGIN
-            PRINT 'La persona no existe'
-            RETURN
-        END
-    
-    IF @Apellido1 = '' OR @Apellido2 = ''
-        BEGIN
-            PRINT 'No se permiten apellidos vacíos (si se desea omitir el segundo apellido, simplemente omitalo en los argumentos)'
-            RETURN
-        END
-
-    ELSE
-        BEGIN
-            UPDATE Persona
-            SET Apellido1 = @Apellido1, Apellido2 = @Apellido2
-            WHERE Cedula = @Cedula;
-
-            PRINT 'Se cambiaron los apellidos de la persona exitosamente'
-        END
-
-END
-GO
-
 
 USE KOALASA
 GO

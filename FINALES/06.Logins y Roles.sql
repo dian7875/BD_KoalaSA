@@ -1,8 +1,26 @@
+
 USE master
 GO
-CREATE LOGIN KOALAADMIN WITH PASSWORD = '123'
-CREATE LOGIN cliente WITH PASSWORD = '123'
-CREATE LOGIN Vendedor WITH PASSWORD = '123'
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'KOALAADMIN')
+BEGIN
+    CREATE LOGIN KOALAADMIN WITH PASSWORD = 'Alpha'
+END
+GO
+
+USE master
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'cliente')
+BEGIN
+    CREATE LOGIN cliente WITH PASSWORD = 'EstoDeberiaEstarEncriptado'
+END
+GO
+
+USE master
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Vendedor')
+BEGIN
+    CREATE LOGIN Vendedor WITH PASSWORD = 'constrasena'
+END
 GO
 
 USE KOALASA
@@ -16,8 +34,9 @@ CREATE ROLE Clientes
 CREATE ROLE Vendedores
 GO
 
+USE KOALASA
+GO
 EXEC sp_addrolemember 'db_owner', 'KOALAADMIN'
 EXEC sp_addrolemember 'Clientes', 'cliente'
 EXEC sp_addrolemember 'Vendedores','Vendedor'
-
-
+GO

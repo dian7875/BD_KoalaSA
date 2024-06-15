@@ -42,7 +42,7 @@ GO
 Use KOALASA
 GO
 CREATE TABLE Zapato (
-    CodigoZapato VARCHAR(10) NOT NULL,
+    CodigoZapato VARCHAR(20) NOT NULL,
     CodTipo INT NOT NULL,
     CodColor INT NOT NULL,
 	Talla INT NOT NULL,
@@ -65,7 +65,7 @@ Use KOALASA
 GO
 CREATE TABLE Stock (
     IdStock INT NOT NULL IDENTITY (1,1),
-    CodigoZapato VARCHAR(10) NOT NULL,
+    CodigoZapato VARCHAR(20) NOT NULL,
     Existencias INT NOT NULL DEFAULT 0,
     FOREIGN KEY (CodigoZapato) REFERENCES Zapato(CodigoZapato)
 	ON DELETE CASCADE

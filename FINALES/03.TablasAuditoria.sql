@@ -1,4 +1,5 @@
 ---Tablas de auditoria
+--Parte 3 Tablas de Auditoria
 USE KOALASA
 GO
 CREATE TABLE Audit_Color (
@@ -83,7 +84,7 @@ CREATE TABLE Audit_Persona (
 	AudID INT IDENTITY(1,1),
 	NombreTabla NVARCHAR(100),
     Operacion NVARCHAR(10),
-    Cedula int,
+    Cedula Varchar(15),
 	Nombre varchar(20),
 	Apellido1 varchar(20),
     Tipo Char(1) not null,
@@ -116,8 +117,8 @@ CREATE TABLE Audit_Compra (
     Operacion NVARCHAR(10),
     NumFactura INT,
     Total money,
-    CedCliente INT,
-	CedVendedor INT,
+    CedCliente Varchar(15),
+	CedVendedor Varchar(15),
     RealizadoPor NVARCHAR(128),
     FechaDeEjecucion DATETIME
 	CONSTRAINT PK_AUDITORIA_COMPRA_ID

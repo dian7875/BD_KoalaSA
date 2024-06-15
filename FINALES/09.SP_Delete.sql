@@ -1,3 +1,4 @@
+--Parte 9 SP's borrar Registro
 --Delete Proveedor
 USE KOALASA
 GO
@@ -44,7 +45,50 @@ BEGIN
 END
 GO
 
-EXEC SP_DELETE_Proveedor @CodProveedor = 1
+--BORRAR ARTICULO DEL CARRITO
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_DELETE_Articulo_Carrito (
+    @NCARRITO INT
+)
+AS
+BEGIN
+    IF (@NCARRITO IS NULL OR @NCARRITO = 0)
+    BEGIN
+        PRINT 'El Numero de Factura no puede ser un campo vacío o ser cero'
+        RETURN
+    END
+    
+    IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE IdCarrito = @NCARRITO)
+    BEGIN
+        PRINT 'El registro ingresado no existe'
+        RETURN
+    END
+
+    BEGIN TRANSACTION
+
+    BEGIN TRY
+        DELETE FROM Carrito_Compra
+        WHERE IdCarrito = @NCARRITO
+
+        COMMIT TRANSACTION
+
+        PRINT 'Articulo del carrito eliminado exitosamente!!'
+    END TRY
+    BEGIN CATCH
+
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        PRINT 'Error al eliminar el registro: ' + @ErrorMessage
+
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState)
+    END CATCH
+END
+GO
 
 
 --Delete Compra
@@ -92,7 +136,6 @@ BEGIN
 END
 GO
 
-EXEC SP_DELETE_Compra @NumFactura = 1
 
 --DELETE ZAPATO
 USE KOALASA
@@ -131,7 +174,6 @@ BEGIN CATCH
 END
 GO
 
-EXEC SP_DELETE_Zapato @CodigoZapato = 1
 
 --DELETE TIPO
 USE KOALASA
@@ -170,10 +212,6 @@ BEGIN CATCH
 END
 GO
 
-EXEC SP_DELETE_Tipo @CodigoTipo = 1
-
-
-
 --DELETE COLOR
 USE KOALASA
 GO
@@ -210,5 +248,3 @@ BEGIN CATCH
     END CATCH
 END
 GO
-
-EXEC SP_DELETE_Color @CodigoColor = 1

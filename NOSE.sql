@@ -1,9 +1,7 @@
 
-EXEC sp_helpdb KOALASA
 
 USE KOALASA;
 
--- Consulta para obtener el tamaño de la tabla 'proveedor'
 SELECT 
     t.NAME AS "Tabla",
     s.Name AS "Esquema",
@@ -27,9 +25,6 @@ GROUP BY
     t.Name, s.Name, p.Rows;
 
 
-
-
-	-- Consulta para obtener el tamaño total y usado de todas las tablas en KB
 SELECT 
     t.NAME AS "Tabla",
     s.Name AS "Esquema",
@@ -51,3 +46,16 @@ GROUP BY
     t.Name, s.Name, p.Rows
 ORDER BY 
     "Tamaño Total (KB)" DESC;
+
+
+
+USE KOALASA
+GO
+
+SELECT 
+    name AS NombreProcedimiento,
+    type_desc AS Tipo,
+    create_date AS FechaCreacion
+FROM sys.procedures
+ORDER BY name;
+GO

@@ -10,3 +10,6 @@ SELECT * FROM Audit_Persona
 SELECT * FROM Audit_Proveedor
 SELECT * FROM Audit_Stock
 go
+
+
+Create view

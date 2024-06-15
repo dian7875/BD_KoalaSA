@@ -121,3 +121,28 @@ EXEC dbo.sp_update_job
 
 PRINT 'Backup completo job creado y programado exitosamente.';
 GO
+
+--Restauracion de BD desde backup
+/*
+USE master
+GO
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'KOALASA')
+BEGIN
+    ALTER DATABASE KOALASA SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+END
+GO
+-- Restaurar la base de datos desde el archivo de copia de seguridad este archivo recordar 
+--lleva la fecha del backup en su nombre por lo cual se recomienda copiar y pegarlo 
+USE master
+GO
+RESTORE DATABASE KOALASA
+FROM DISK = 'C:\SQL-Backup\KOALASAFULL.bak'
+WITH REPLACE,
+MOVE 'KOALASA_Data' TO 'C:\SQL-Data\KOALASA.mdf',
+MOVE 'KOALASA_Log' TO 'C:\SQL-Data\KOALASA.ldf';
+GO
+USE master
+GO
+ALTER DATABASE KOALASA SET MULTI_USER;
+GO
+*/
