@@ -84,6 +84,7 @@ Apellido1 as 'Primer Apellido',
 Apellido2 as 'Segundo Apellido',
 Correo ,
 Telefono,
+Direccion,
 Tipo 
 from Persona
 GO
@@ -123,4 +124,34 @@ Select
 	Cantidad  ,
 	SubTotal  As 'Sub Total'
 from Carrito_Compra
+GO
+
+USE KOALASA
+GO
+create view Vw_Z_CTSP
+AS
+SELECT 
+Z.[Codigo de Zapato],Z.[Codigo de Color],Z.[Codigo de tipo],Z.[Precio Unitario],Z.Talla,
+T.[Nombre Del Tipo],T.[Codigo del Proveedor],T.[Genero Del Zapato],
+C.[Nombre Del Color],
+p.[Nombre del Proveedor],
+S.[Codigo en Inventario],S.Existencias
+FROM Vw_zapato Z
+JOIN Vw_Color C on Z.[Codigo de Color] = C.[Codigo de Color]
+JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
+JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+JOIN Vw_Proveedor P ON T.[Codigo del Proveedor] = P.[Codigo de Proveedor]
+GO
+
+
+
+Create view Vw_C_I_VCMZ
+AS
+SELECT
+CC.[Numero de Factura],CC.Cantidad,CC.[Sub Total],CC.[Codigo de carrito],CC.[Çodigo en Inventario],
+C.Fecha, C.[Cedula Cliente],C.[Cedula Vendedor],C.[Metodo de pago],C.Total,
+Z.[Codigo de Zapato],Z.[Nombre Del Tipo],Z.[Nombre Del Color],Z.[Precio Unitario]
+FROM Vw_Compra C
+JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
+JOIN Vw_Z_CTSP Z ON Z.[Codigo en Inventario] = CC.[Çodigo en Inventario]
 GO

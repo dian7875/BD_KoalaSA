@@ -1,9 +1,6 @@
 
-
-
 USE KOALASA;
 GO
-
 DECLARE @backupFileName NVARCHAR(250);
 SET @backupFileName = 'C:\SQL-Backup\KOALASA_' + CONVERT(NVARCHAR(20), GETDATE(), 112) + '_' + REPLACE(CONVERT(NVARCHAR(8), GETDATE(), 108), ':', '') + '.bak';
 
@@ -28,10 +25,6 @@ NOFORMAT, NOINIT,
 NAME = N'KOALASA-Full Database Backup', 
 SKIP, NOREWIND, NOUNLOAD, STATS = 10;
 GO
-
-
-
-
 
 USE msdb;
 GO

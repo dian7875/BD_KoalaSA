@@ -257,7 +257,7 @@ CREATE PROCEDURE Sp_BuscarTiposPorProveedor
 AS
 BEGIN
     SELECT 
-		[Codigo de Proveedor], [Nombre Del Tipo],
+	[Codigo del Proveedor], [Nombre Del Tipo],
 	CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -265,10 +265,9 @@ BEGIN
 	THEN 'MUJER'
 	ELSE 'UNISEX'
 	END AS [Genero Del Zapato]
-    FROM  Vw_Proveedor P
-	Join Vw_Tipo T on P.[Codigo de Proveedor] = T.[Codigo del Proveedor]
+    FROM  Vw_Z_CTSP
     WHERE 
-	P.[Codigo de Proveedor] = @codigo_proveedor
+	[Codigo del Proveedor] = @codigo_proveedor
 END
 GO
 
@@ -280,7 +279,7 @@ create procedure SP_BuscarZapato_POR_Color
 AS
 BEGIN 
 SELECT 
-	[Codigo de tipo],Z.[Codigo de Zapato],Z.[Codigo de Color],
+	[Codigo de tipo],[Codigo de Zapato],[Codigo de Color],
 	CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -291,11 +290,8 @@ SELECT
 Talla,
 [Precio Unitario],
 Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C on Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-Where C.[Nombre Del Color] = @Nombre_Color order by [Nombre Del Color]
+FROM Vw_Z_CTSP
+Where [Nombre Del Color] = @Nombre_Color order by [Nombre Del Color]
 END
 GO
 
@@ -306,7 +302,7 @@ CREATE PROCEDURE SP_BUSCAR_ZAPATO_POR_CODIGO
 AS
 BEGIN
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Color],[Nombre Del Tipo],
+[Codigo de Zapato], [Nombre Del Color],[Nombre Del Tipo],
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -317,11 +313,8 @@ CASE
 	Talla,
 	[Precio Unitario],
 	Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-WHERE Z.[Codigo de Zapato]=@CodigoZapato
+FROM Vw_Z_CTSP
+WHERE [Codigo de Zapato]=@CodigoZapato
 END
 GO
 
@@ -333,7 +326,7 @@ CREATE PROCEDURE SP_BUSCAR_RANGO_PRECIO
 AS
 BEGIN 
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color],
+	[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color],
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -344,11 +337,8 @@ CASE
 	Talla,
 	[Precio Unitario],
 	Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-WHERE Z.[Precio Unitario] BETWEEN @MINIMO AND @MAXIMO ORDER BY [Precio Unitario] ASC
+FROM Vw_Z_CTSP
+WHERE [Precio Unitario] BETWEEN @MINIMO AND @MAXIMO ORDER BY [Precio Unitario] ASC
 END
 GO
 
@@ -360,7 +350,7 @@ CREATE PROCEDURE SP_BUSCAR_TALLA
 AS
 BEGIN 
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
+[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -371,11 +361,8 @@ CASE
 Talla,
 [Precio Unitario],
 Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-WHERE Z.Talla = @TALLA ORDER BY Talla ASC
+FROM Vw_Z_CTSP
+WHERE Talla = @TALLA ORDER BY Talla ASC
 END
 GO
 
@@ -388,7 +375,7 @@ CREATE PROCEDURE SP_BUSCAR_RANGO_TALLAS
 AS
 BEGIN 
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
+[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -398,12 +385,9 @@ CASE
 	END AS [Genero Del Zapato],
 Talla,
 [Precio Unitario],
-S.Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-WHERE Z.Talla BETWEEN @TALLAMIN and @TALLAMAX ORDER BY Talla ASC
+Existencias
+FROM Vw_Z_CTSP
+WHERE Talla BETWEEN @TALLAMIN and @TALLAMAX ORDER BY Talla ASC
 END
 GO
 
@@ -425,10 +409,7 @@ CASE
 Talla,
 [Precio Unitario],
 Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+FROM Vw_Z_CTSP
 WHERE Existencias > @CANTIDADSTOCK ORDER BY Existencias ASC
 END
 GO
@@ -440,7 +421,7 @@ CREATE PROCEDURE SP_BUSCAR_STOCK_MAYOR_A
 AS
 BEGIN 
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
+[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -451,10 +432,7 @@ CASE
 Talla,
 [Precio Unitario],
 Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+FROM Vw_Z_CTSP
 WHERE Existencias < @CANTIDADSTOCK ORDER BY Existencias ASC
 END
 GO
@@ -466,7 +444,7 @@ CREATE PROCEDURE SP_BUSCAR_ZAPATO_POR_PROVEEDOR
 AS
 BEGIN 
 SELECT
-Z.[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
+[Codigo de Zapato], [Nombre Del Tipo], [Nombre Del Color], 
 CASE 
 	WHEN [Genero Del Zapato] = 'H'
 	THEN 'HOMBRE'
@@ -477,11 +455,7 @@ CASE
 Talla,
 [Precio Unitario],
 Existencias
-FROM Vw_Zapato Z
-JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-JOIN Vw_Proveedor P ON T.[Codigo del Proveedor] = P.[Codigo de Proveedor]
+FROM Vw_Z_CTSP
 WHERE @CODIGOPROVEEEDOR = [Codigo de Proveedor]
 END
 GO
@@ -513,7 +487,8 @@ BEGIN
 			WHEN Tipo='V'
 			THEN 'Vendedor'
 			ELSE 'DESCONOCIDO'
-			END AS Tipo
+			END AS Tipo,
+		Direccion
 		FROM Vw_Persona
 		WHERE  @CEDULA = Cedula
 	END
@@ -548,7 +523,8 @@ BEGIN
 		WHEN Tipo = 'C' THEN 'CLIENTE'
 		WHEN Tipo = 'V' THEN 'Vendedor'
 		ELSE 'DESCONOCIDO'
-		END AS Tipo
+		END AS Tipo,
+		Direccion
 	FROM Vw_Persona
 	WHERE Tipo = @TIPO;
 	END
@@ -580,7 +556,8 @@ BEGIN
                 WHEN Tipo = 'C' THEN 'CLIENTE'
                 WHEN Tipo = 'V' THEN 'VENDEDOR'
                 ELSE 'DESCONOCIDO'
-            END AS Tipo
+            END AS Tipo,
+			Direccion
         FROM 
             Vw_Persona
         WHERE 
@@ -615,7 +592,8 @@ BEGIN
                 WHEN Tipo = 'C' THEN 'CLIENTE'
                 WHEN Tipo = 'V' THEN 'VENDEDOR'
                 ELSE 'DESCONOCIDO'
-            END AS Tipo
+            END AS Tipo,
+			Direccion
         FROM 
             Vw_Persona
         WHERE 
@@ -639,12 +617,9 @@ BEGIN
     BEGIN
         SELECT
          C.[Numero de Factura], C.Fecha,C.[Cedula Cliente],C.[Cedula Vendedor],Total,[Nombre de metodo de pago]
-        FROM 
-            Vw_Compra C
-			JOIN Vw_Persona P ON C.[Cedula Cliente] = P.Cedula
-			JOIN Vw_MPago MP ON C.[Metodo de pago] = MP.[Codigo de metodo de pago]
+        FROM Vw_C_I_VCMZ
         WHERE 
-          C.[Cedula Cliente] = @CEDULA
+          [Cedula Cliente] = @CEDULA
     END
 END
 GO

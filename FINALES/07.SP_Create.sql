@@ -564,13 +564,14 @@ CREATE PROCEDURE SP_INGRESAR_PERSONA(
     @NApellido2 VARCHAR(20),
     @NCorreo VARCHAR(30),
     @NTelefono VARCHAR(20),
+	@NDireccion Varchar(255),
     @NTipo CHAR(1)
 )
 AS
 BEGIN
     BEGIN TRANSACTION
     BEGIN TRY
-        IF (@NCedula IS NULL OR @NNombre = '' OR @NApellido1 = '' OR @NCorreo = '' OR @NTelefono = '' OR @NTipo = '')
+        IF (@NCedula IS NULL OR @NNombre = '' OR @NApellido1 = '' OR @NCorreo = '' OR @NTelefono = '' OR @NTipo = '' OR @NDireccion='')
         BEGIN
             PRINT 'No Se pueden Ingresar Campos En Blanco'
             ROLLBACK TRANSACTION
@@ -594,8 +595,8 @@ BEGIN
             ROLLBACK TRANSACTION
             RETURN;
         END
-        INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Correo, Telefono, Tipo)
-        VALUES (@NCedula, @NNombre, @NApellido1, @NApellido2, @NCorreo, @NTelefono, @NTipo)
+        INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Correo, Telefono,Direccion, Tipo)
+        VALUES (@NCedula, @NNombre, @NApellido1, @NApellido2, @NCorreo, @NTelefono,@NDireccion, @NTipo)
         COMMIT TRANSACTION
         PRINT 'Registro de '+@NNombre+' Exitoso'
 		IF(@NTipo='C')

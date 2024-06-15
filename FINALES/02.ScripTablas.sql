@@ -84,6 +84,7 @@ CREATE TABLE Persona (
 	Apellido2 varchar(20) null,
 	Correo varchar(30) not null,
 	Telefono Varchar(20) not null,
+	Direccion Varchar(255) NULL,
 	Tipo Char(1) not null,
 	CONSTRAINT PK_Persona_Cedula
     PRIMARY KEY CLUSTERED(Cedula)

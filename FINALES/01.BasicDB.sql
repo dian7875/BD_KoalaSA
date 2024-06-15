@@ -8,11 +8,11 @@ SIZE= 1300MB,
 MaxSize=6gb,
 FileGrowth= 390mb
 ) LOG ON(
-Name  = 'Koala_Log',
-filename='C:\SQLLog\Koala_Log.ldf',
-Size = 6MB,
-MaxSize= 10MB,
-Filegrowth=1MB
+Name='KOALA_Log',
+FILENAME='C:\SQLData\KOALA_Log.ldf',
+SIZE= 500MB,
+MAXSIZE=2GB,
+FILEGROWTH= 100MB 
 )
 GO
 
@@ -21,8 +21,6 @@ go
 alter database KOALASA
 add filegroup Stock
 go
-
-
 
 use master
 go
@@ -42,13 +40,11 @@ alter database KOALASA
 add FILEGROUP Auditorias
 go
 
-
 use master
 go
 alter database KOALASA
 add FILEGROUP Proveedores
 go
-
 
 use master
 go
@@ -76,8 +72,6 @@ Filegrowth= 9MB
 )to filegroup Personas
 go
 
-
-
 use master
 go
 alter database KOALASA
@@ -90,8 +84,6 @@ MaxSize= 748MB,
 Filegrowth= 57MB
 )to filegroup Ventas
 go
-
-
 
 use master
 go
@@ -117,5 +109,4 @@ Size = 10MB,
 MaxSize= 40MB,
 Filegrowth= 3MB
 )to filegroup Proveedores
-go
-
+GO
