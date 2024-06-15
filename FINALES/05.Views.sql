@@ -61,16 +61,30 @@ GO
 
 Use KOALASA
 GO
+Create View Vw_Zapato_Con_Stock
+as
+Select
+Zapato.CodigoZapato as 'Codigo de Zapato',
+Zapato.CodTipo As 'Codigo de tipo',
+Zapato.CodColor AS 'Codigo de Color' ,
+Zapato.Talla,
+Zapato.PrecioUnitario As 'Precio Unitario',
+Stock.Existencias as 'Cantidad en Stock'
+from Zapato JOIN Stock ON Zapato.CodigoZapato = Stock.CodigoZapato
+GO
+
+Use KOALASA
+GO
 Create View Vw_Persona
 as
 Select
-	Cedula ,
-	Nombre ,
-	Apellido1 as 'Primer Apellido',
-	Apellido2 as 'Segundo Apellido',
-	Correo ,
-	Telefono,
-	Tipo 
+Cedula ,
+Nombre ,
+Apellido1 as 'Primer Apellido',
+Apellido2 as 'Segundo Apellido',
+Correo ,
+Telefono,
+Tipo 
 from Persona
 GO
 

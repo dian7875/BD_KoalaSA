@@ -1,5 +1,5 @@
 Use KOALASA
-go
+GO
 CREATE TABLE Proveedor (
     CodigoProveedor VARCHAR(10) NOT NULL,
     NombreProv VARCHAR(20) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE Proveedor (
     Correo VARCHAR(50) NOT NULL,
     CONSTRAINT Pk_Proveedor_Codigo
     PRIMARY KEY CLUSTERED(CodigoProveedor)
-)ON Proveedores;
+)ON Proveedores
 GO
 
 Use KOALASA
@@ -25,7 +25,7 @@ CREATE TABLE Tipo (
     ON UPDATE CASCADE,
     CONSTRAINT PK_Tipo_Codigo
     PRIMARY KEY CLUSTERED(CodigoTipo)
-)ON Stock;
+)ON Stock
 GO
 
 
@@ -36,8 +36,9 @@ CREATE TABLE Color (
     NombreColor VARCHAR(10) NOT NULL,
     CONSTRAINT PK_Color_Codigo
     PRIMARY KEY CLUSTERED(CodigoColor)
-)ON Stock;
-GO		
+)ON Stock
+GO	
+
 Use KOALASA
 GO
 CREATE TABLE Zapato (
@@ -56,7 +57,7 @@ CREATE TABLE Zapato (
     ON UPDATE CASCADE,
     CONSTRAINT PK_Zapato_Codigo
     PRIMARY KEY CLUSTERED(CodigoZapato)
-)ON Stock;
+)ON Stock
 GO
 
 
@@ -71,7 +72,7 @@ CREATE TABLE Stock (
     ON UPDATE CASCADE,
     CONSTRAINT PK_Inventario_IDArticulo
     PRIMARY KEY CLUSTERED(IdStock)
-)ON Stock;
+)ON Stock
 GO
 
 USE KOALASA
@@ -96,7 +97,7 @@ CREATE TABLE Metodo_Pago (
     NombreMetodo VARCHAR(25) NOT NULL,
     CONSTRAINT PK_MetodoPago_ID
     PRIMARY KEY CLUSTERED(IdMetodoPago)
-)ON Ventas;
+)ON Ventas
 GO
 
 Use KOALASA
@@ -120,7 +121,7 @@ CREATE TABLE Compra (
     FOREIGN KEY (CedCliente) REFERENCES Persona(Cedula),
     CONSTRAINT PK_Compra_NumFactura
     PRIMARY KEY CLUSTERED(NumFactura)
-)ON Ventas;
+)ON Ventas
 GO
 
 Use KOALASA
@@ -141,5 +142,5 @@ CREATE TABLE Carrito_Compra (
     ON UPDATE CASCADE,
     CONSTRAINT Pk_Carrito_Compra_IdCarrito
     PRIMARY KEY CLUSTERED(IdCarrito)
-)ON Ventas;
+)ON Ventas
 GO

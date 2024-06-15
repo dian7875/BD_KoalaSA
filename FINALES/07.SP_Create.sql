@@ -187,7 +187,7 @@ GO
 
 
 use KOALASA
-go
+GO
 CREATE PROCEDURE SP_INGRESAR_PROVEEDOR(
     @NCodigoProveedor VARCHAR(10),
     @NNombreProveedor VARCHAR(20),
@@ -201,59 +201,59 @@ BEGIN
     BEGIN TRY
         IF(@NCedulaJuridica = '' OR @NCodigoProveedor = '' OR @NNombreProveedor = '' OR @NTelefono = '' OR @NCorreo = '')
         BEGIN
-            PRINT 'No Se pueden Ingresar Campos En Blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No Se pueden Ingresar Campos En Blanco'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		 IF (@NCorreo NOT LIKE '%_@__%.__%')
         BEGIN
-            PRINT 'El Correo Electrónico No Es Válido';
+            PRINT 'El Correo Electrónico No Es Válido'
             ROLLBACK TRANSACTION;
-            RETURN;
+            RETURN
         END
 		 IF (@NTelefono NOT LIKE '%[0-9]%')
         BEGIN
-            PRINT 'El Número de Teléfono No Es Válido';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El Número de Teléfono No Es Válido'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         IF EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @NCodigoProveedor)
         BEGIN
-            PRINT 'El Proveedor Ya Existe';
-            ROLLBACK TRANSACTION;
+            PRINT 'El Proveedor Ya Existe'
+            ROLLBACK TRANSACTION
             RETURN;
         END
 		IF EXISTS (SELECT 1 FROM Proveedor WHERE NombreProv = @NNombreProveedor)
         BEGIN
-            PRINT 'El Nombre del Proveedor Ya Existe';
+            PRINT 'El Nombre del Proveedor Ya Existe'
             ROLLBACK TRANSACTION;
             RETURN;
         END;
         IF EXISTS (SELECT 1 FROM Proveedor WHERE CedulaJuridica = @NCedulaJuridica)
         BEGIN
-            PRINT 'La Cédula Jurídica Ya Está Asociada a Otro Proveedor';
-            ROLLBACK TRANSACTION;
+            PRINT 'La Cédula Jurídica Ya Está Asociada a Otro Proveedor'
+            ROLLBACK TRANSACTION
             RETURN;
-        END;
+        END
         IF EXISTS (SELECT 1 FROM Proveedor WHERE Correo = @NCorreo)
         BEGIN
-            PRINT 'El Correo Ya Está Asociado a Otro Proveedor';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
+            PRINT 'El Correo Ya Está Asociado a Otro Proveedor'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
         INSERT INTO Proveedor (CodigoProveedor, NombreProv, CedulaJuridica, Telefono, Correo)
         VALUES (@NCodigoProveedor, @NNombreProveedor, @NCedulaJuridica, @NTelefono, @NCorreo);
-        COMMIT TRANSACTION;
+        COMMIT TRANSACTION
          PRINT 'Proveedor registrado correctamente: Código ' + @NCodigoProveedor + ', Nombre ' + @NNombreProveedor;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
+        ROLLBACK TRANSACTION
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+            @ErrorState = ERROR_STATE()
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -267,25 +267,25 @@ CREATE PROCEDURE SP_INGRESAR_TIPO(
 )
 AS
 BEGIN
-    BEGIN TRANSACTION;
+    BEGIN TRANSACTION
     BEGIN TRY
         IF(@NNombreTipo = '' OR @NCodProveedor = '' OR @NGenero='')
         BEGIN
-            PRINT 'No Se pueden Ingresar Campos En Blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No Se pueden Ingresar Campos En Blanco'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		 IF NOT EXISTS (SELECT 1 FROM Proveedor WHERE CodigoProveedor = @NCodProveedor)
         BEGIN
-            PRINT 'El Proveedor No Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El Proveedor No Existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		  IF(@NGenero NOT IN ('H', 'M', 'U'))
         BEGIN
-            PRINT 'El género debe ser H (Hombre), M (Mujer) o U (Unisex)';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El género debe ser H (Hombre), M (Mujer) o U (Unisex)'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         IF EXISTS (SELECT 1 FROM Tipo WHERE NombreTipo = @NNombreTipo AND Genero = @NGenero)
         BEGIN
@@ -294,28 +294,28 @@ BEGIN
                 WHEN 'M' THEN 'Mujer' 
                 WHEN 'H' THEN 'Hombre' 
 				WHEN 'U' THEN 'Unisex'
-            END + ' ya existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            END + ' ya existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
        INSERT INTO Tipo (NombreTipo, CodProveedor, Genero)
-        VALUES (@NNombreTipo, @NCodProveedor, @NGenero);
-        COMMIT TRANSACTION;
+        VALUES (@NNombreTipo, @NCodProveedor, @NGenero)
+        COMMIT TRANSACTION
         PRINT 'Tipo ' + @NNombreTipo + ' para ' + 
         CASE @NGenero 
             WHEN 'M' THEN 'Mujer' 
             WHEN 'H' THEN 'Hombre' 
 			WHEN 'U' THEN 'Unisex'
-        END + ' registrado correctamente';
+        END + ' registrado correctamente'
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
+        ROLLBACK TRANSACTION
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
             @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -331,24 +331,95 @@ BEGIN
     BEGIN TRY
         IF(@NNombreColor = '')
         BEGIN
-            PRINT 'No Se pueden Ingresar Campos En Blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No Se pueden Ingresar Campos En Blanco'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         IF EXISTS (SELECT 1 FROM Color WHERE NombreColor = @NNombreColor)
         BEGIN
-            PRINT 'El Color Ya Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El Color Ya Existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         INSERT INTO Color (NombreColor)
-        VALUES (@NNombreColor);
-        COMMIT TRANSACTION;
-        PRINT 'Color '+@NNombreColor+' Registrado Correctamente';
+        VALUES (@NNombreColor)
+        COMMIT TRANSACTION
+        PRINT 'Color '+@NNombreColor+' Registrado Correctamente'
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
+    END CATCH
+END
+GO
+
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_INGRESAR_ZAPATO(
+    @NCodTipo INT,
+    @NCodColor INT,
+    @NTalla INT,
+    @NPrecioUnitario MONEY
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        IF (@NCodTipo = '' OR @NCodColor = ''OR @NTalla = '' OR @NPrecioUnitario = '')
+        BEGIN
+            PRINT 'No Se pueden Ingresar Campos En Blanco'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+		IF(@NTalla<1)
+		BEGIN
+			PRINT 'Las tallas no pueden ser ni 0 ni numeros negativos, en caso de talla a la medida digite 99'
+			ROLLBACK TRANSACTION
+			RETURN;
+		END
+        IF NOT EXISTS (SELECT 1 FROM Color WHERE CodigoColor= @NCodColor)
+        BEGIN
+            PRINT 'El Color no Existe'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Tipo WHERE CodigoTipo = @NCodTipo)
+        BEGIN
+            PRINT 'El Tipo no Existe'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        DECLARE @NCodigoZapato VARCHAR(20)
+        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) +'-'+ CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
+        IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
+        BEGIN
+            PRINT 'El Zapato Ya Existe'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+		DECLARE @NombreTipo VARCHAR(20), @NombreColor VARCHAR(20)
+        SELECT @NombreTipo = NombreTipo FROM Tipo WHERE CodigoTipo = @NCodTipo
+        SELECT @NombreColor = NombreColor FROM Color WHERE CodigoColor = @NCodColor
+        INSERT INTO Zapato (CodigoZapato, CodTipo, CodColor, Talla, PrecioUnitario)
+        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario)
+        COMMIT TRANSACTION
+        PRINT 'Zapato Registrado Correctamente codigo de zapato '
+		+ CAST(@NCodigoZapato AS Varchar)
+		+', Tipo: ' +CAST(@NombreTipo  AS Varchar)
+		+ ', Color: ' + @NombreColor 
+		+', Talla: '+CAST(@NTalla AS Varchar)
+		IF (@NTalla=99)
+		PRINT 'Talla a la medida'
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
@@ -357,9 +428,6 @@ BEGIN
     END CATCH
 END
 GO
-
-
-
 
 USE KOALASA
 GO
@@ -377,58 +445,58 @@ BEGIN
         BEGIN
             PRINT 'No se pueden ingresar campos en blanco';
             ROLLBACK TRANSACTION;
-            RETURN;
+            RETURN
         END
         IF(@NTalla < 1)
         BEGIN
             PRINT 'Las tallas no pueden ser ni 0 ni números negativos. En caso de talla a la medida, digite 99';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            ROLLBACK TRANSACTION
+            RETURN
         END
-        DECLARE @NCodColor INT;
-        SELECT @NCodColor = CodigoColor FROM Color WHERE NombreColor = @NNombreColor;
+        DECLARE @NCodColor INT
+        SELECT @NCodColor = CodigoColor FROM Color WHERE NombreColor = @NNombreColor
         IF (@NCodColor IS NULL)
         BEGIN
-            PRINT 'El color no existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El color no existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
-        DECLARE @NCodTipo INT;
-        SELECT @NCodTipo = CodigoTipo FROM Tipo WHERE NombreTipo = @NNombreTipo;
+        DECLARE @NCodTipo INT
+        SELECT @NCodTipo = CodigoTipo FROM Tipo WHERE NombreTipo = @NNombreTipo
         IF (@NCodTipo IS NULL)
         BEGIN
-            PRINT 'El tipo no existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El tipo no existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
-        DECLARE @NCodigoZapato VARCHAR(20);
+        DECLARE @NCodigoZapato VARCHAR(20)
         SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) + '-' + CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR);
         IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
         BEGIN
-            PRINT 'El zapato ya existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El zapato ya existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         INSERT INTO Zapato (CodigoZapato, CodTipo, CodColor, Talla, PrecioUnitario)
-        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario);
-        COMMIT TRANSACTION;
+        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario)
+        COMMIT TRANSACTION
         PRINT 'Zapato registrado correctamente. Código de zapato: ' 
         + CAST(@NCodigoZapato AS VARCHAR)
         + ', Tipo: ' + @NNombreTipo
         + ', Color: ' + @NNombreColor 
-        + ', Talla: ' + CAST(@NTalla AS VARCHAR);
+        + ', Talla: ' + CAST(@NTalla AS VARCHAR)
         
         IF (@NTalla = 99)
-            PRINT 'Talla a la medida';
+            PRINT 'Talla a la medida'
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
             @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -442,11 +510,11 @@ CREATE PROCEDURE SP_INGRESAR_STOCK(
 )
 AS
 BEGIN
-    BEGIN TRANSACTION;
+    BEGIN TRANSACTION
     BEGIN TRY
         IF (@CodigoZapato = '')
         BEGIN
-            PRINT 'No se pueden ingresar campos en blanco';
+            PRINT 'No se pueden ingresar campos en blanco'
             ROLLBACK TRANSACTION;
             RETURN;
         END
@@ -458,29 +526,29 @@ BEGIN
         END
 		 IF EXISTS (SELECT 1 FROM Stock WHERE CodigoZapato = @CodigoZapato)
         BEGIN
-            PRINT 'El Zapato ya tiene un stock asociado';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El Zapato ya tiene un stock asociado'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         IF @Existencias < 0
         BEGIN
-            PRINT 'No se pueden ingresar cantidades negativas';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No se pueden ingresar cantidades negativas'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         INSERT INTO Stock (CodigoZapato, Existencias)
-        VALUES (@CodigoZapato, @Existencias);
-        COMMIT TRANSACTION;
-        PRINT 'Stock Ingresado Correctamente. Se añadieron ' + CAST(@Existencias AS VARCHAR) + ' Unidades con Codigo ' + @CodigoZapato;
+        VALUES (@CodigoZapato, @Existencias)
+        COMMIT TRANSACTION
+        PRINT 'Stock Ingresado Correctamente. Se añadieron ' + CAST(@Existencias AS VARCHAR) + ' Unidades con Codigo ' + @CodigoZapato
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
             @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -500,49 +568,49 @@ CREATE PROCEDURE SP_INGRESAR_PERSONA(
 )
 AS
 BEGIN
-    BEGIN TRANSACTION;
+    BEGIN TRANSACTION
     BEGIN TRY
         IF (@NCedula IS NULL OR @NNombre = '' OR @NApellido1 = '' OR @NCorreo = '' OR @NTelefono = '' OR @NTipo = '')
         BEGIN
-            PRINT 'No Se pueden Ingresar Campos En Blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No Se pueden Ingresar Campos En Blanco'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		  IF @NTipo NOT IN ('C', 'V')
         BEGIN
-            PRINT 'El tipo debe ser "C" (Cliente) o "V" (Vendedor)';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El tipo debe ser "C" (Cliente) o "V" (Vendedor)'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		IF @NTipo = 'V' AND USER_NAME() = 'Vendedor'
         BEGIN
-            PRINT 'No tienes permiso para ingresar personas tipo Vendedor';
-            ROLLBACK TRANSACTION;
+            PRINT 'No tienes permiso para ingresar personas tipo Vendedor'
+            ROLLBACK TRANSACTION
             RETURN;
         END
         IF EXISTS (SELECT 1 FROM Persona WHERE Cedula = @NCedula)
         BEGIN
-            PRINT 'La Cedula Ya esta asociada a Alguien';
-            ROLLBACK TRANSACTION;
+            PRINT 'La Cedula Ya esta asociada a Alguien'
+            ROLLBACK TRANSACTION
             RETURN;
         END
         INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Correo, Telefono, Tipo)
-        VALUES (@NCedula, @NNombre, @NApellido1, @NApellido2, @NCorreo, @NTelefono, @NTipo);
-        COMMIT TRANSACTION;
-        PRINT 'Registro de '+@NNombre+' Exitoso';
+        VALUES (@NCedula, @NNombre, @NApellido1, @NApellido2, @NCorreo, @NTelefono, @NTipo)
+        COMMIT TRANSACTION
+        PRINT 'Registro de '+@NNombre+' Exitoso'
 		IF(@NTipo='C')
 		PRINT @NNombre+' Se Registro Como Cliente'
 		Else
 		PRINT @NNombre+' Se Registro Como Vendedor'
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+            @ErrorState = ERROR_STATE()
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -554,33 +622,33 @@ CREATE PROCEDURE SP_AñADIR_METODO_PAGO(
 )
 AS
 BEGIN
-    BEGIN TRANSACTION;
+    BEGIN TRANSACTION
     BEGIN TRY
         IF (@NMetodoPago = '')
         BEGIN
-            PRINT 'No se pueden ingresar campos en blanco';
+            PRINT 'No se pueden ingresar campos en blanco'
             ROLLBACK TRANSACTION;
             RETURN;
         END
         IF EXISTS (SELECT 1 FROM Metodo_Pago WHERE NombreMetodo = @NMetodoPago)
         BEGIN
-            PRINT 'El Metodo de Pago ya existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El Metodo de Pago ya existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         INSERT INTO Metodo_Pago (NombreMetodo)
         VALUES (@NMetodoPago);
         COMMIT TRANSACTION;
-        PRINT 'Metodo de Pago agregado exitosamente ya se pueden cancelar las compras con el metodo '+@NMetodoPago;
+        PRINT 'Metodo de Pago agregado exitosamente ya se pueden cancelar las compras con el metodo '+@NMetodoPago
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+            @ErrorState = ERROR_STATE()
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
 END
 GO
@@ -599,51 +667,168 @@ BEGIN
     BEGIN TRY
         IF (@IdStock ='' OR @Cantidad ='' OR @Cantidad <= 0)
         BEGIN
-            PRINT 'No se pueden ingresar campos en blanco o cantidad negativa/cero';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No se pueden ingresar campos en blanco o cantidad negativa/cero'
+            ROLLBACK TRANSACTION
+            RETURN
         END
 		 IF NOT EXISTS (SELECT 1 FROM Stock WHERE IdStock = @IdStock)
         BEGIN
-            PRINT 'El IdStock no existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'El IdStock no existe'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         
-        DECLARE @CodigoZapato VARCHAR(10);
-        DECLARE @PrecioUnitario MONEY;
-        DECLARE @UnidadesDisponibles INT;
+        DECLARE @CodigoZapato VARCHAR(10)
+        DECLARE @PrecioUnitario MONEY
+        DECLARE @UnidadesDisponibles INT
         SELECT @CodigoZapato = s.CodigoZapato, @UnidadesDisponibles = s.Existencias
         FROM Stock s
-        WHERE s.IdStock = @IdStock;
+        WHERE s.IdStock = @IdStock
         IF @Cantidad > @UnidadesDisponibles
         BEGIN
-            PRINT 'No hay suficientes unidades en stock';
-            ROLLBACK TRANSACTION;
-            RETURN;
+            PRINT 'No hay suficientes unidades en stock'
+            ROLLBACK TRANSACTION
+            RETURN
         END
         SELECT @PrecioUnitario = PrecioUnitario
         FROM Zapato
-        WHERE CodigoZapato = @CodigoZapato;
-        DECLARE @SubTotal MONEY;
+        WHERE CodigoZapato = @CodigoZapato
+        DECLARE @SubTotal MONEY
         SET @SubTotal = @PrecioUnitario * @Cantidad;
         INSERT INTO Carrito_Compra (IdStock, Cantidad, SubTotal)
-        VALUES (@IdStock, @Cantidad, @SubTotal);
+        VALUES (@IdStock, @Cantidad, @SubTotal)
         UPDATE Stock
         SET Existencias = Existencias - @Cantidad
-        WHERE IdStock = @IdStock;
-        COMMIT TRANSACTION;
-        PRINT 'Artículo agregado al carrito exitosamente';
+        WHERE IdStock = @IdStock
+        COMMIT TRANSACTION
+        PRINT 'Artículo agregado al carrito exitosamente'
 		PRINT 'Resumen de compra SubTotal: '+CAST(@SubTotal as Varchar)+', Articulos: '+CAST(@Cantidad AS VARCHAR)+' Pares de Zapatos Codigo: '+@CodigoZapato
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
         SELECT 
             @ErrorMessage = ERROR_MESSAGE(),
             @ErrorSeverity = ERROR_SEVERITY(),
             @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
     END CATCH
-END;
+END
+GO
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_GENERAR_COMPRA(
+    @CedCliente Varchar(15),
+    @CedVendedor varchar(15),
+    @IdMetodoPago INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        IF (@IdMetodoPago IS NULL)
+        BEGIN
+            PRINT 'No se pueden ingresar campos en blanco'
+            ROLLBACK TRANSACTION;
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
+        BEGIN
+            PRINT 'El vendedor no es válido'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedCliente AND Tipo = 'C')
+        BEGIN
+            PRINT 'El cliente no es válido'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
+        BEGIN
+            PRINT 'No hay artículos en el carrito'
+            ROLLBACK TRANSACTION
+            RETURN
+        END;
+        DECLARE @Total MONEY
+        SELECT @Total = SUM(SubTotal)
+        FROM Carrito_Compra
+        WHERE NumFactura IS NULL
+        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
+        VALUES (GETDATE(), @Total, @CedCliente, @CedVendedor, @IdMetodoPago)
+        DECLARE @NumFactura INT
+        SET @NumFactura = SCOPE_IDENTITY()
+        UPDATE Carrito_Compra
+        SET NumFactura = @NumFactura
+        WHERE NumFactura IS NULL
+        COMMIT TRANSACTION
+
+        PRINT 'Factura '+Cast(@NumFactura as VARCHAR)+' generada exitosamente, Total: '+CAST(@Total AS VARCHAR)
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
+    END CATCH
+END
+GO
+
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_COMPRA_COMO_VENDEDOR(
+    @CedVendedor VARCHAR(15),
+    @IdMetodoPago INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        IF (@IdMetodoPago IS NULL)
+        BEGIN
+            PRINT 'No se pueden ingresar campos en blanco'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
+        BEGIN
+            PRINT 'El vendedor no es válido'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
+        BEGIN
+            PRINT 'No hay artículos en el carrito'
+            ROLLBACK TRANSACTION
+            RETURN
+        END
+        DECLARE @Total MONEY
+        SELECT @Total = SUM(SubTotal)
+        FROM Carrito_Compra
+        WHERE NumFactura IS NULL;
+        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
+        VALUES (GETDATE(), @Total, @CedVendedor, @CedVendedor, @IdMetodoPago)
+        DECLARE @NumFactura INT
+        SET @NumFactura = SCOPE_IDENTITY()
+        UPDATE Carrito_Compra
+        SET NumFactura = @NumFactura
+        WHERE NumFactura IS NULL
+        COMMIT TRANSACTION
+        PRINT 'Factura ' + CAST(@NumFactura AS VARCHAR) + ' generada exitosamente, Total: ' + CAST(@Total AS VARCHAR)
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE()
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage
+    END CATCH
+END
 GO
