@@ -1,3 +1,162 @@
+--Vendedor del mes
+USE KOALASA
+GO
+CREATE PROCEDURE SP_EMPLEADO_DEL_MES
+AS
+BEGIN 
+  DECLARE @INICIO DATE, @FIN DATE;
+    SET @FIN = GETDATE();
+    SET @INICIO = DATEADD(DAY, -30, @FIN);
+    IF NOT EXISTS (SELECT 1 
+                   FROM Vw_Compra
+                   WHERE Fecha BETWEEN @INICIO AND @FIN)
+    BEGIN
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+    END
+    ELSE
+    BEGIN
+        SELECT TOP 1
+            P.Cedula,
+            P.Nombre,
+            P.[Primer Apellido],
+            P.[Segundo Apellido],
+            COUNT(C.[Numero de Factura]) AS 'Numero De Ventas',
+			SUM(C.Total) AS 'Total Vendido'
+        FROM 
+            Vw_Compra C
+            JOIN Vw_Persona P ON C.[Cedula Vendedor] = P.Cedula
+        WHERE 
+            C.Fecha BETWEEN @INICIO AND @FIN
+			 GROUP BY 
+            P.Cedula, P.Nombre, P.[Primer Apellido], P.[Segundo Apellido]
+		Order By
+			SUM(C.Total) DESC;
+    END
+END;
+GO
+
+--Comprador del Mes
+USE KOALASA
+GO
+CREATE PROCEDURE SP_COMPRADOR_DEL_MES
+AS
+BEGIN 
+  DECLARE @INICIO DATE, @FIN DATE;
+    SET @FIN = GETDATE();
+    SET @INICIO = DATEADD(DAY, -30, @FIN);
+    IF NOT EXISTS (SELECT 1 
+                   FROM Vw_Compra
+                   WHERE Fecha BETWEEN @INICIO AND @FIN)
+    BEGIN
+        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
+    END
+    ELSE
+    BEGIN
+        SELECT TOP 1
+            P.Cedula,
+            P.Nombre,
+            P.[Primer Apellido],
+            P.[Segundo Apellido],
+            COUNT(C.[Numero de Factura]) AS 'Numero De Compras',
+			SUM(C.Total) AS 'Total comprado'
+        FROM 
+            Vw_Compra C
+            JOIN Vw_Persona P ON C.[Cedula Cliente] = P.Cedula
+        WHERE 
+            C.Fecha BETWEEN @INICIO AND @FIN
+			 GROUP BY 
+            P.Cedula, P.Nombre, P.[Primer Apellido], P.[Segundo Apellido]
+		ORDER BY 
+			SUM(C.Total) DESC;
+    END
+END;
+GO
+---Catalogo de zapato(Talla,Colores,Tipo,Genero)
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_CATALO_DE_ZAPATOS
+AS
+BEGIN 
+    SELECT 
+          Z.[Codigo de Zapato],
+		  T.[Nombre Del Tipo],
+		  C.[Nombre Del Color],
+		  CASE 
+			WHEN [Genero Del Zapato] = 'H'
+			THEN 'HOMBRE'
+			WHEN [Genero Del Zapato]='M'
+			THEN 'MUJER'
+			ELSE 'UNISEX'
+			END AS [Genero Del Zapato],
+		S.Existencias,
+		Z.[Precio Unitario]
+		
+        FROM 
+          Vw_Zapato Z
+		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
+		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
+		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+        WHERE 
+			S.Existencias > 0
+			ORDER BY
+			[Precio Unitario] ASC
+    END;
+GO
+
+EXECUTE SP_CATALO_DE_ZAPATOS_POR_GENERO 'H'
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_CATALO_DE_ZAPATOS_POR_GENERO
+@GENERO CHAR(1)
+AS
+BEGIN 
+   IF @GENERO NOT IN ('H', 'M', 'U')
+    BEGIN
+        PRINT 'El parámetro @GENERO debe ser especificado como ''H'' (Hombre), ''M'' (Mujer), o ''U'' (Unisex).';
+        RETURN;
+    END
+    SELECT 
+          Z.[Codigo de Zapato],
+		  T.[Nombre Del Tipo],
+		  C.[Nombre Del Color],
+		  CASE 
+			WHEN [Genero Del Zapato] = 'H'
+			THEN 'HOMBRE'
+			WHEN [Genero Del Zapato]='M'
+			THEN 'MUJER'
+			ELSE 'UNISEX'
+			END AS [Genero Del Zapato],
+		S.Existencias,
+		Z.[Precio Unitario]
+		
+        FROM 
+          Vw_Zapato Z
+		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
+		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
+		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+        WHERE 
+			S.Existencias > 0 AND T.[Genero Del Zapato] = @GENERO
+			ORDER BY
+			[Precio Unitario] ASC;
+
+	  IF @@ROWCOUNT = 0
+    BEGIN
+        PRINT 'No hay zapatos disponibles en stock para el género especificado ' + 
+              CASE 
+                  WHEN @GENERO = 'H' THEN 'Hombre'
+                  WHEN @GENERO = 'M' THEN 'Mujer'
+                  WHEN @GENERO = 'U' THEN 'Unisex'
+              END + '.';
+    END
+ END;
+GO
+
+
+
+
+
 USE KOALASA
 GO
 CREATE PROCEDURE SP_BuscarProveedor_Estado(
@@ -490,80 +649,6 @@ BEGIN
 END;
 GO
 
---Vendedor del mes
-USE KOALASA
-GO
-CREATE PROCEDURE SP_EMPLEADO_DEL_MES
-AS
-BEGIN 
-  DECLARE @INICIO DATE, @FIN DATE;
-    SET @FIN = GETDATE();
-    SET @INICIO = DATEADD(DAY, -30, @FIN);
-    IF NOT EXISTS (SELECT 1 
-                   FROM Vw_Compra
-                   WHERE Fecha BETWEEN @INICIO AND @FIN)
-    BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
-    END
-    ELSE
-    BEGIN
-        SELECT TOP 1
-            P.Cedula,
-            P.Nombre,
-            P.[Primer Apellido],
-            P.[Segundo Apellido],
-            COUNT(C.[Numero de Factura]) AS 'Numero De Ventas',
-			SUM(C.Total) AS 'Total Vendido'
-        FROM 
-            Vw_Compra C
-            JOIN Vw_Persona P ON C.[Cedula Vendedor] = P.Cedula
-        WHERE 
-            C.Fecha BETWEEN @INICIO AND @FIN
-			 GROUP BY 
-            P.Cedula, P.Nombre, P.[Primer Apellido], P.[Segundo Apellido]
-		Order By
-			SUM(C.Total) DESC;
-    END
-END;
-GO
-
---Comprador del Mes
-USE KOALASA
-GO
-CREATE PROCEDURE SP_COMPRADOR_DEL_MES
-AS
-BEGIN 
-  DECLARE @INICIO DATE, @FIN DATE;
-    SET @FIN = GETDATE();
-    SET @INICIO = DATEADD(DAY, -30, @FIN);
-    IF NOT EXISTS (SELECT 1 
-                   FROM Vw_Compra
-                   WHERE Fecha BETWEEN @INICIO AND @FIN)
-    BEGIN
-        PRINT 'No existe ninguna transacción en el rango de fechas especificado.';
-    END
-    ELSE
-    BEGIN
-        SELECT TOP 1
-            P.Cedula,
-            P.Nombre,
-            P.[Primer Apellido],
-            P.[Segundo Apellido],
-            COUNT(C.[Numero de Factura]) AS 'Numero De Compras',
-			SUM(C.Total) AS 'Total comprado'
-        FROM 
-            Vw_Compra C
-            JOIN Vw_Persona P ON C.[Cedula Cliente] = P.Cedula
-        WHERE 
-            C.Fecha BETWEEN @INICIO AND @FIN
-			 GROUP BY 
-            P.Cedula, P.Nombre, P.[Primer Apellido], P.[Segundo Apellido]
-		ORDER BY 
-			SUM(C.Total) DESC;
-    END
-END;
-GO
-
 --Ventas del mes
 USE KOALASA
 GO
@@ -895,88 +980,5 @@ BEGIN
              SUM(CC.Cantidad * Z.[Precio Unitario]) DESC;
     END
 END;
-GO
-
-
----Catalogo de zapato(Talla,Colores,Tipo,Genero)
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_CATALO_DE_ZAPATOS
-AS
-BEGIN 
-    SELECT 
-          Z.[Codigo de Zapato],
-		  T.[Nombre Del Tipo],
-		  C.[Nombre Del Color],
-		  CASE 
-			WHEN [Genero Del Zapato] = 'H'
-			THEN 'HOMBRE'
-			WHEN [Genero Del Zapato]='M'
-			THEN 'MUJER'
-			ELSE 'UNISEX'
-			END AS [Genero Del Zapato],
-		S.Existencias,
-		Z.[Precio Unitario]
-		
-        FROM 
-          Vw_Zapato Z
-		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-        WHERE 
-			S.Existencias > 0
-			ORDER BY
-			[Precio Unitario] ASC
-    END;
-GO
-
-EXECUTE SP_CATALO_DE_ZAPATOS_POR_GENERO 'H'
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_CATALO_DE_ZAPATOS_POR_GENERO
-@GENERO CHAR(1)
-AS
-BEGIN 
-   IF @GENERO NOT IN ('H', 'M', 'U')
-    BEGIN
-        PRINT 'El parámetro @GENERO debe ser especificado como ''H'' (Hombre), ''M'' (Mujer), o ''U'' (Unisex).';
-        RETURN;
-    END
-    SELECT 
-          Z.[Codigo de Zapato],
-		  T.[Nombre Del Tipo],
-		  C.[Nombre Del Color],
-		  CASE 
-			WHEN [Genero Del Zapato] = 'H'
-			THEN 'HOMBRE'
-			WHEN [Genero Del Zapato]='M'
-			THEN 'MUJER'
-			ELSE 'UNISEX'
-			END AS [Genero Del Zapato],
-		S.Existencias,
-		Z.[Precio Unitario]
-		
-        FROM 
-          Vw_Zapato Z
-		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
-        WHERE 
-			S.Existencias > 0 AND T.[Genero Del Zapato] = @GENERO
-			ORDER BY
-			[Precio Unitario] ASC;
-
-	  IF @@ROWCOUNT = 0
-    BEGIN
-        PRINT 'No hay zapatos disponibles en stock para el género especificado ' + 
-              CASE 
-                  WHEN @GENERO = 'H' THEN 'Hombre'
-                  WHEN @GENERO = 'M' THEN 'Mujer'
-                  WHEN @GENERO = 'U' THEN 'Unisex'
-              END + '.';
-    END
- END;
 GO
 

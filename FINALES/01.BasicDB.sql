@@ -22,6 +22,34 @@ alter database KOALASA
 add filegroup Stock
 go
 
+
+
+use master
+go
+alter database KOALASA
+add FILEGROUP Personas
+go
+
+use master
+go
+alter database KOALASA
+add FILEGROUP Ventas
+go
+
+use master
+go
+alter database KOALASA
+add FILEGROUP Auditorias
+go
+
+
+use master
+go
+alter database KOALASA
+add FILEGROUP Proveedores
+go
+
+
 use master
 go
 alter database KOALASA
@@ -33,13 +61,6 @@ Size = 26MB,
 MaxSize= 104MB,
 Filegrowth= 8MB
 )to filegroup Stock
-go
-
-
-use master
-go
-alter database KOALASA
-add FILEGROUP Personas
 go
 
 use master
@@ -56,11 +77,6 @@ Filegrowth= 9MB
 go
 
 
-use master
-go
-alter database KOALASA
-add FILEGROUP Ventas
-go
 
 use master
 go
@@ -76,11 +92,6 @@ Filegrowth= 57MB
 go
 
 
-use master
-go
-alter database KOALASA
-add FILEGROUP Auditorias
-go
 
 use master
 go
@@ -93,12 +104,6 @@ Size = 1062MB,
 MaxSize= 4GB,
 Filegrowth= 319MB
 )to filegroup Auditorias
-go
-
-use master
-go
-alter database KOALASA
-add FILEGROUP Proveedores
 go
 
 use master

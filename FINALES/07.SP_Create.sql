@@ -1,5 +1,191 @@
 USE KOALASA
 GO
+CREATE PROCEDURE SP_INGRESAR_ZAPATO(
+    @NCodTipo INT,
+    @NCodColor INT,
+    @NTalla INT,
+    @NPrecioUnitario MONEY
+)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        IF (@NCodTipo = '' OR @NCodColor = ''OR @NTalla = '' OR @NPrecioUnitario = '')
+        BEGIN
+            PRINT 'No Se pueden Ingresar Campos En Blanco';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+		IF(@NTalla<1)
+		BEGIN
+			PRINT 'Las tallas no pueden ser ni 0 ni numeros negativos, en caso de talla a la medida digite 99'
+			ROLLBACK TRANSACTION
+			RETURN;
+		END
+        IF NOT EXISTS (SELECT 1 FROM Color WHERE CodigoColor= @NCodColor)
+        BEGIN
+            PRINT 'El Color no Existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        IF NOT EXISTS (SELECT 1 FROM Tipo WHERE CodigoTipo = @NCodTipo)
+        BEGIN
+            PRINT 'El Tipo no Existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        DECLARE @NCodigoZapato VARCHAR(20)
+        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) +'-'+ CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
+        IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
+        BEGIN
+            PRINT 'El Zapato Ya Existe';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+		DECLARE @NombreTipo VARCHAR(20), @NombreColor VARCHAR(20);
+        SELECT @NombreTipo = NombreTipo FROM Tipo WHERE CodigoTipo = @NCodTipo;
+        SELECT @NombreColor = NombreColor FROM Color WHERE CodigoColor = @NCodColor;
+        INSERT INTO Zapato (CodigoZapato, CodTipo, CodColor, Talla, PrecioUnitario)
+        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario);
+        COMMIT TRANSACTION;
+        PRINT 'Zapato Registrado Correctamente codigo de zapato '
+		+ CAST(@NCodigoZapato AS Varchar)
+		+', Tipo: ' +CAST(@NombreTipo  AS Varchar)
+		+ ', Color: ' + @NombreColor 
+		+', Talla: '+CAST(@NTalla AS Varchar);
+		IF (@NTalla=99)
+		PRINT 'Talla a la medida'
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+    END CATCH
+END
+GO
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_GENERAR_COMPRA(
+    @CedCliente Varchar(15),
+    @CedVendedor varchar(15),
+    @IdMetodoPago INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        IF (@IdMetodoPago IS NULL)
+        BEGIN
+            PRINT 'No se pueden ingresar campos en blanco';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
+        BEGIN
+            PRINT 'El vendedor no es válido';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedCliente AND Tipo = 'C')
+        BEGIN
+            PRINT 'El cliente no es válido';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
+        BEGIN
+            PRINT 'No hay artículos en el carrito';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        DECLARE @Total MONEY;
+        SELECT @Total = SUM(SubTotal)
+        FROM Carrito_Compra
+        WHERE NumFactura IS NULL;
+        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
+        VALUES (GETDATE(), @Total, @CedCliente, @CedVendedor, @IdMetodoPago);
+        DECLARE @NumFactura INT;
+        SET @NumFactura = SCOPE_IDENTITY();
+        UPDATE Carrito_Compra
+        SET NumFactura = @NumFactura
+        WHERE NumFactura IS NULL;
+        COMMIT TRANSACTION;
+
+        PRINT 'Factura '+Cast(@NumFactura as VARCHAR)+' generada exitosamente, Total: '+CAST(@Total AS VARCHAR);
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+    END CATCH
+END;
+GO
+
+
+USE KOALASA
+GO
+CREATE PROCEDURE SP_COMPRA_COMO_VENDEDOR(
+    @CedVendedor VARCHAR(15),
+    @IdMetodoPago INT
+)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        IF (@IdMetodoPago IS NULL)
+        BEGIN
+            PRINT 'No se pueden ingresar campos en blanco';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
+        BEGIN
+            PRINT 'El vendedor no es válido';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
+        BEGIN
+            PRINT 'No hay artículos en el carrito';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END;
+        DECLARE @Total MONEY;
+        SELECT @Total = SUM(SubTotal)
+        FROM Carrito_Compra
+        WHERE NumFactura IS NULL;
+        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
+        VALUES (GETDATE(), @Total, @CedVendedor, @CedVendedor, @IdMetodoPago);
+        DECLARE @NumFactura INT;
+        SET @NumFactura = SCOPE_IDENTITY();
+        UPDATE Carrito_Compra
+        SET NumFactura = @NumFactura
+        WHERE NumFactura IS NULL;
+        COMMIT TRANSACTION;
+        PRINT 'Factura ' + CAST(@NumFactura AS VARCHAR) + ' generada exitosamente, Total: ' + CAST(@Total AS VARCHAR);
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(),
+            @ErrorSeverity = ERROR_SEVERITY(),
+            @ErrorState = ERROR_STATE();
+        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
+    END CATCH
+END;
+GO
+
+
 use KOALASA
 go
 CREATE PROCEDURE SP_INGRESAR_PROVEEDOR(
@@ -173,75 +359,7 @@ END
 GO
 
 
-USE KOALASA
-GO
-CREATE PROCEDURE SP_INGRESAR_ZAPATO(
-    @NCodTipo INT,
-    @NCodColor INT,
-    @NTalla INT,
-    @NPrecioUnitario MONEY
-)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        IF (@NCodTipo = '' OR @NCodColor = ''OR @NTalla = '' OR @NPrecioUnitario = '')
-        BEGIN
-            PRINT 'No Se pueden Ingresar Campos En Blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-		IF(@NTalla<1)
-		BEGIN
-			PRINT 'Las tallas no pueden ser ni 0 ni numeros negativos, en caso de talla a la medida digite 99'
-			ROLLBACK TRANSACTION
-			RETURN;
-		END
-        IF NOT EXISTS (SELECT 1 FROM Color WHERE CodigoColor= @NCodColor)
-        BEGIN
-            PRINT 'El Color no Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-        IF NOT EXISTS (SELECT 1 FROM Tipo WHERE CodigoTipo = @NCodTipo)
-        BEGIN
-            PRINT 'El Tipo no Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-        DECLARE @NCodigoZapato VARCHAR(20)
-        SET @NCodigoZapato = CAST(@NCodTipo AS VARCHAR) +'-'+ CAST(@NCodColor AS VARCHAR) + '-' + CAST(@NTalla AS VARCHAR)
-        IF EXISTS (SELECT 1 FROM Zapato WHERE CodigoZapato = @NCodigoZapato)
-        BEGIN
-            PRINT 'El Zapato Ya Existe';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END
-		DECLARE @NombreTipo VARCHAR(20), @NombreColor VARCHAR(20);
-        SELECT @NombreTipo = NombreTipo FROM Tipo WHERE CodigoTipo = @NCodTipo;
-        SELECT @NombreColor = NombreColor FROM Color WHERE CodigoColor = @NCodColor;
-        INSERT INTO Zapato (CodigoZapato, CodTipo, CodColor, Talla, PrecioUnitario)
-        VALUES (@NCodigoZapato, @NCodTipo, @NCodColor, @NTalla, @NPrecioUnitario);
-        COMMIT TRANSACTION;
-        PRINT 'Zapato Registrado Correctamente codigo de zapato '
-		+ CAST(@NCodigoZapato AS Varchar)
-		+', Tipo: ' +CAST(@NombreTipo  AS Varchar)
-		+ ', Color: ' + @NombreColor 
-		+', Talla: '+CAST(@NTalla AS Varchar);
-		IF (@NTalla=99)
-		PRINT 'Talla a la medida'
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
-    END CATCH
-END
-GO
+
 
 USE KOALASA
 GO
@@ -517,123 +635,6 @@ BEGIN
         COMMIT TRANSACTION;
         PRINT 'Artículo agregado al carrito exitosamente';
 		PRINT 'Resumen de compra SubTotal: '+CAST(@SubTotal as Varchar)+', Articulos: '+CAST(@Cantidad AS VARCHAR)+' Pares de Zapatos Codigo: '+@CodigoZapato
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
-    END CATCH
-END;
-GO
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_GENERAR_COMPRA(
-    @CedCliente Varchar(15),
-    @CedVendedor varchar(15),
-    @IdMetodoPago INT
-)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        IF (@IdMetodoPago IS NULL)
-        BEGIN
-            PRINT 'No se pueden ingresar campos en blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
-        BEGIN
-            PRINT 'El vendedor no es válido';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedCliente AND Tipo = 'C')
-        BEGIN
-            PRINT 'El cliente no es válido';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
-        BEGIN
-            PRINT 'No hay artículos en el carrito';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        DECLARE @Total MONEY;
-        SELECT @Total = SUM(SubTotal)
-        FROM Carrito_Compra
-        WHERE NumFactura IS NULL;
-        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
-        VALUES (GETDATE(), @Total, @CedCliente, @CedVendedor, @IdMetodoPago);
-        DECLARE @NumFactura INT;
-        SET @NumFactura = SCOPE_IDENTITY();
-        UPDATE Carrito_Compra
-        SET NumFactura = @NumFactura
-        WHERE NumFactura IS NULL;
-        COMMIT TRANSACTION;
-
-        PRINT 'Factura '+Cast(@NumFactura as VARCHAR)+' generada exitosamente, Total: '+CAST(@Total AS VARCHAR);
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT, @ErrorState INT;
-        SELECT 
-            @ErrorMessage = ERROR_MESSAGE(),
-            @ErrorSeverity = ERROR_SEVERITY(),
-            @ErrorState = ERROR_STATE();
-        PRINT 'Ha ocurrido un error: ' + @ErrorMessage;
-    END CATCH
-END;
-GO
-
-
-USE KOALASA
-GO
-CREATE PROCEDURE SP_COMPRA_COMO_VENDEDOR(
-    @CedVendedor VARCHAR(15),
-    @IdMetodoPago INT
-)
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        IF (@IdMetodoPago IS NULL)
-        BEGIN
-            PRINT 'No se pueden ingresar campos en blanco';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        IF NOT EXISTS (SELECT 1 FROM Persona WHERE Cedula = @CedVendedor AND Tipo = 'V')
-        BEGIN
-            PRINT 'El vendedor no es válido';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        IF NOT EXISTS (SELECT 1 FROM Carrito_Compra WHERE NumFactura IS NULL)
-        BEGIN
-            PRINT 'No hay artículos en el carrito';
-            ROLLBACK TRANSACTION;
-            RETURN;
-        END;
-        DECLARE @Total MONEY;
-        SELECT @Total = SUM(SubTotal)
-        FROM Carrito_Compra
-        WHERE NumFactura IS NULL;
-        INSERT INTO Compra (Fecha, Total, CedCliente, CedVendedor, IdMetodoPago)
-        VALUES (GETDATE(), @Total, @CedVendedor, @CedVendedor, @IdMetodoPago);
-        DECLARE @NumFactura INT;
-        SET @NumFactura = SCOPE_IDENTITY();
-        UPDATE Carrito_Compra
-        SET NumFactura = @NumFactura
-        WHERE NumFactura IS NULL;
-        COMMIT TRANSACTION;
-        PRINT 'Factura ' + CAST(@NumFactura AS VARCHAR) + ' generada exitosamente, Total: ' + CAST(@Total AS VARCHAR);
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION;

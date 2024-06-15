@@ -14,7 +14,6 @@ CREATE TABLE Audit_Color (
 )ON Auditorias;
 GO
 
-
 Use KOALASA
 GO
 CREATE TABLE Audit_Tipo (
