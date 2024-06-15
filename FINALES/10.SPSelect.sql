@@ -616,7 +616,7 @@ BEGIN
     ELSE
     BEGIN
         SELECT
-         C.[Numero de Factura], C.Fecha,C.[Cedula Cliente],C.[Cedula Vendedor],Total,[Nombre de metodo de pago]
+         [Numero de Factura], Fecha,[Cedula Cliente],[Cedula Vendedor],Total,[Nombre de metodo de pago]
         FROM Vw_C_I_VCMZ
         WHERE 
           [Cedula Cliente] = @CEDULA
@@ -701,7 +701,7 @@ GO
 --Ventas del mes
 USE KOALASA
 GO
-CREATE PROCEDURE SP_VENDIDO_EN_EL_MES
+CREATE PROCEDURE SP_VENTAS_EN_EL_MES
 AS
 BEGIN 
   DECLARE @INICIO DATE, @FIN DATE;
@@ -727,7 +727,7 @@ GO
 
 USE KOALASA
 GO
-CREATE PROCEDURE SP_VENTAS_DEL_MES
+CREATE PROCEDURE SP_INFO_VENTAS_DEL_MES
 AS
 BEGIN 
   DECLARE @INICIO DATE, @FIN DATE;
@@ -777,19 +777,13 @@ BEGIN
     ELSE
     BEGIN
         SELECT
-         C.[Numero de Factura], C.Fecha,C.[Cedula Cliente],C.[Cedula Vendedor],
-		 Z.[Codigo de Zapato],T.[Nombre Del Tipo],CO.[Nombre Del Color],
-		 CC.Cantidad,Z.[Precio Unitario],CC.[Sub Total]
+         [Numero de Factura], Fecha,[Cedula Cliente],[Cedula Vendedor],
+		 [Codigo de Zapato],[Nombre Del Tipo],[Nombre Del Color],
+		 Cantidad,[Precio Unitario],[Sub Total]
         FROM 
-            Vw_Compra C
-			JOIN Vw_Persona P ON C.[Cedula Cliente] = P.Cedula
-			JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
-			JOIN Vw_Stock S ON CC.[Çodigo en Inventario] = S.[Codigo en Inventario]
-			JOIN Vw_Zapato Z ON S.[Codigo de Zapato] = Z.[Codigo de Zapato]
-			JOIN Vw_Color CO ON Z.[Codigo de Color] = CO.[Codigo de Color]
-			JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
+            Vw_C_I_VCMZ
         WHERE 
-          C.[Cedula Cliente] = @CEDULA
+          [Cedula Cliente] = @CEDULA
     END
 END
 GO
@@ -856,19 +850,13 @@ BEGIN
     ELSE
     BEGIN
         SELECT
-         C.[Numero de Factura], C.Fecha,C.[Cedula Cliente],C.[Cedula Vendedor],
-		 Z.[Codigo de Zapato],T.[Nombre Del Tipo],CO.[Nombre Del Color],
-		 CC.Cantidad,Z.[Precio Unitario],CC.[Sub Total]
+         [Numero de Factura], Fecha,[Cedula Cliente],[Cedula Vendedor],
+		 [Codigo de Zapato],[Nombre Del Tipo],[Nombre Del Color],
+		 Cantidad,[Precio Unitario],[Sub Total]
         FROM 
-            Vw_Compra C
-			JOIN Vw_Persona P ON C.[Cedula Cliente] = P.Cedula
-			JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
-			JOIN Vw_Stock S ON CC.[Çodigo en Inventario] = S.[Codigo en Inventario]
-			JOIN Vw_Zapato Z ON S.[Codigo de Zapato] = Z.[Codigo de Zapato]
-			JOIN Vw_Color CO ON Z.[Codigo de Color] = CO.[Codigo de Color]
-			JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
+            Vw_C_I_VCMZ
         WHERE 
-          C.[Numero de Factura] = @NUMFACTURA
+          [Numero de Factura] = @NUMFACTURA
     END
 END
 GO
@@ -919,18 +907,17 @@ BEGIN
     ELSE
     BEGIN
         SELECT 
-            MP.[Nombre de metodo de pago],
-            COUNT(C.[Numero de Factura]) AS 'Ventas Realizadas',
-            SUM(C.Total) AS 'Total Vendido'
+            [Nombre de metodo de pago],
+            COUNT([Numero de Factura]) AS 'Ventas Realizadas',
+            SUM(Total) AS 'Total Vendido'
         FROM 
-            Vw_Compra C
-            JOIN Vw_MPago MP ON C.[Metodo de pago] = MP.[Codigo de metodo de pago]
+            Vw_C_I_VCMZ
         WHERE 
-            C.Fecha BETWEEN @INICIO AND @FIN
+            Fecha BETWEEN @INICIO AND @FIN
         GROUP BY 
-            MP.[Nombre de metodo de pago]
+            [Nombre de metodo de pago]
         ORDER BY 
-             SUM(C.Total) DESC;
+             SUM(Total) DESC;
     END
 END
 GO
@@ -953,18 +940,17 @@ BEGIN
     ELSE
     BEGIN
         SELECT 
-            MP.[Nombre de metodo de pago],
-            COUNT(C.[Numero de Factura]) AS 'Ventas Realizadas',
-            SUM(C.Total) AS 'Total Vendido'
+            [Nombre de metodo de pago],
+            COUNT([Numero de Factura]) AS 'Ventas Realizadas',
+            SUM(Total) AS 'Total Vendido'
         FROM 
-            Vw_Compra C
-            JOIN Vw_MPago MP ON C.[Metodo de pago] = MP.[Codigo de metodo de pago]
+            Vw_C_I_VCMZ
         WHERE 
-            C.Fecha BETWEEN @INICIO AND @FIN
+            Fecha BETWEEN @INICIO AND @FIN
         GROUP BY 
-            MP.[Nombre de metodo de pago]
+            [Nombre de metodo de pago]
         ORDER BY 
-              SUM(C.Total) DESC;
+              SUM(Total) DESC;
     END
 END
 GO
@@ -983,18 +969,15 @@ BEGIN
     ELSE
     BEGIN
         SELECT 
-            Z.[Codigo de Zapato],
-            Z.[Precio Unitario],
-            SUM(CC.Cantidad * Z.[Precio Unitario]) AS 'Total Venta'
+            [Codigo de Zapato],
+            [Precio Unitario],
+            SUM(Cantidad * [Precio Unitario]) AS 'Total Venta'
         FROM 
-            Vw_Compra C
-            JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
-            JOIN Vw_Stock S ON CC.[Çodigo en Inventario] = S.[Codigo en Inventario]
-            JOIN Vw_Zapato Z ON S.[Codigo de Zapato] = Z.[Codigo de Zapato]
+            Vw_C_I_VCMZ
         GROUP BY 
-            Z.[Codigo de Zapato], Z.[Precio Unitario]
+            [Codigo de Zapato], [Precio Unitario]
         ORDER BY 
-            SUM(CC.Cantidad * Z.[Precio Unitario]) DESC
+            SUM(Cantidad * [Precio Unitario]) DESC
     END
 END
 GO
@@ -1012,21 +995,18 @@ BEGIN
     ELSE
     BEGIN
         SELECT 
-            Z.[Codigo de Zapato],
-            Z.[Precio Unitario],
-			SUM(CC.Cantidad) AS 'Cantidad Vendida',
-            SUM(CC.Cantidad * Z.[Precio Unitario]) AS 'Total Vendido'
+            [Codigo de Zapato],
+            [Precio Unitario],
+			SUM(Cantidad) AS 'Cantidad Vendida',
+            SUM(Cantidad * [Precio Unitario]) AS 'Total Vendido'
         FROM 
-            Vw_Compra C
-            JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
-            JOIN Vw_Stock S ON CC.[Çodigo en Inventario] = S.[Codigo en Inventario]
-            JOIN Vw_Zapato Z ON S.[Codigo de Zapato] = Z.[Codigo de Zapato]
+            Vw_C_I_VCMZ
         WHERE 
-            Z.[Codigo de Zapato] = @CodigoZapato
+            [Codigo de Zapato] = @CodigoZapato
         GROUP BY 
-            Z.[Codigo de Zapato], Z.[Precio Unitario]
+            [Codigo de Zapato], [Precio Unitario]
         ORDER BY 
-             SUM(CC.Cantidad * Z.[Precio Unitario]) DESC
+             SUM(Cantidad * [Precio Unitario]) DESC
     END
 END
 GO
@@ -1040,9 +1020,9 @@ CREATE PROCEDURE SP_CATALO_DE_ZAPATOS
 AS
 BEGIN 
     SELECT 
-          Z.[Codigo de Zapato],
-		  T.[Nombre Del Tipo],
-		  C.[Nombre Del Color],
+          [Codigo de Zapato],
+		  [Nombre Del Tipo],
+		  [Nombre Del Color],
 		  CASE 
 			WHEN [Genero Del Zapato] = 'H'
 			THEN 'HOMBRE'
@@ -1050,16 +1030,13 @@ BEGIN
 			THEN 'MUJER'
 			ELSE 'UNISEX'
 			END AS [Genero Del Zapato],
-		S.Existencias,
-		Z.[Precio Unitario]
+		Existencias,
+		[Precio Unitario]
 		
         FROM 
-          Vw_Zapato Z
-		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+          Vw_Z_CTSP
         WHERE 
-			S.Existencias > 0
+			Existencias > 0
 			ORDER BY
 			[Precio Unitario] ASC
     END
@@ -1079,9 +1056,9 @@ BEGIN
         RETURN
     END
     SELECT 
-          Z.[Codigo de Zapato],
-		  T.[Nombre Del Tipo],
-		  C.[Nombre Del Color],
+          [Codigo de Zapato],
+		  [Nombre Del Tipo],
+		  [Nombre Del Color],
 		  CASE 
 			WHEN [Genero Del Zapato] = 'H'
 			THEN 'HOMBRE'
@@ -1089,16 +1066,13 @@ BEGIN
 			THEN 'MUJER'
 			ELSE 'UNISEX'
 			END AS [Genero Del Zapato],
-		S.Existencias,
-		Z.[Precio Unitario]
+		Existencias,
+		[Precio Unitario]
 		
         FROM 
-          Vw_Zapato Z
-		  JOIN Vw_Color C ON Z.[Codigo de Color] = C.[Codigo de Color]
-		  JOIN Vw_Tipo T ON Z.[Codigo de tipo] = T.[Codigo del Tipo]
-		  JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
+          Vw_Z_CTSP
         WHERE 
-			S.Existencias > 0 AND T.[Genero Del Zapato] = @GENERO
+			Existencias > 0 AND [Genero Del Zapato] = @GENERO
 			ORDER BY
 			[Precio Unitario] ASC;
 

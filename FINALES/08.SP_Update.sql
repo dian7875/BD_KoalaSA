@@ -441,6 +441,39 @@ BEGIN
 END
 GO
 
+
+USE KOALASA
+GO
+
+CREATE PROCEDURE SP_EDITAR_DIRECCION_PERSONA @Cedula VARCHAR(15),@NDireccion Varchar(15)
+AS
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM Persona WHERE Cedula = @Cedula)
+        BEGIN
+            PRINT 'La persona no existe'
+            RETURN
+        END
+    
+    IF @NDireccion = ''
+        BEGIN
+            PRINT 'No se permiten una direccion sin informacion'
+            RETURN
+        END
+
+    ELSE
+        BEGIN
+            UPDATE Persona
+            SET @NDireccion = @NDireccion
+            WHERE Cedula = @Cedula;
+
+            PRINT 'Se cambio la direccion de la persona exitosamente, nueva direccion: '+ @NDireccion+'.'
+        END
+
+END
+GO
+
+-- 
+
 -- 
 
 USE KOALASA

@@ -143,15 +143,15 @@ JOIN Vw_Stock S ON Z.[Codigo de Zapato] = S.[Codigo de Zapato]
 JOIN Vw_Proveedor P ON T.[Codigo del Proveedor] = P.[Codigo de Proveedor]
 GO
 
-
-
 Create view Vw_C_I_VCMZ
 AS
 SELECT
 CC.[Numero de Factura],CC.Cantidad,CC.[Sub Total],CC.[Codigo de carrito],CC.[Çodigo en Inventario],
 C.Fecha, C.[Cedula Cliente],C.[Cedula Vendedor],C.[Metodo de pago],C.Total,
-Z.[Codigo de Zapato],Z.[Nombre Del Tipo],Z.[Nombre Del Color],Z.[Precio Unitario]
+Z.[Codigo de Zapato],Z.[Nombre Del Tipo],Z.[Nombre Del Color],Z.[Precio Unitario],
+MP.[Nombre de metodo de pago]
 FROM Vw_Compra C
 JOIN Vw_Carrito_Compra CC ON C.[Numero de Factura] = CC.[Numero de Factura]
 JOIN Vw_Z_CTSP Z ON Z.[Codigo en Inventario] = CC.[Çodigo en Inventario]
+JOIN Vw_MPago MP ON MP.[Codigo de metodo de pago] = C.[Metodo de pago]
 GO
